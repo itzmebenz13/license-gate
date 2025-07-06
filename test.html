@@ -1,0 +1,10 @@
+<script>
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  if (isChrome) {
+    // Option 1: Redirect them
+    window.location.href = "https://example.com/nochrome.html";
+
+    // Option 2: Show a warning instead
+    // document.body.innerHTML = "<h2>⚠️ Access not allowed on Chrome. Please use another browser.</h2>";
+  }
+</script>
