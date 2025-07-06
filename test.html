@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SHEIN Gateway Page</title>
+  <title>Browser Check</title>
   <style>
     body {
       margin: 0;
       padding: 0;
+      font-family: 'Segoe UI', sans-serif;
       background-color: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,36 +19,31 @@
     .card {
       background-color: #fff;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       text-align: center;
-      max-width: 450px;
-      width: 90%;
+      max-width: 400px;
+      display: none;
     }
 
-    h1 {
-      font-size: 1.4rem;
-      color: #000;
-      margin-bottom: 20px;
+    .error {
+      color: red;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
 
-    p {
-      font-size: 1rem;
-      color: #444;
-      margin-bottom: 10px;
+    .content {
+      display: none;
     }
 
     .btn {
-      margin-top: 20px;
-      display: inline-block;
       background-color: #000;
       color: #fff;
       padding: 12px 20px;
       border: none;
       border-radius: 6px;
       font-size: 1rem;
-      font-weight: bold;
-      text-decoration: none;
+      margin-top: 20px;
       cursor: pointer;
     }
 
@@ -58,27 +53,33 @@
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>SHEIN QR Gateway</h1>
-    <p>Welcome to your personalized access page.</p>
-    <p>Click the button below to continue to the event.</p>
-    <a class="btn" href="https://www.shein.com/event-link">Continue</a>
+
+  <div class="card" id="errorBox">
+    <div class="error">⛔ Sorry, this page is not available in Chromium-based browsers.</div>
+    <p>Please use Firefox or Safari to access this content.</p>
+  </div>
+
+  <div class="card content" id="realContent">
+    <h2>🎉 Welcome!</h2>
+    <p>You are using a supported browser.</p>
+    <a href="https://www.shein.com/event-link" class="btn">Go to Event</a>
   </div>
 
   <script>
-    function isRealChrome() {
+    function isChromium() {
       const ua = navigator.userAgent;
-      const isChromium = ua.includes('Chrome');
-      const isGoogle = navigator.vendor === 'Google Inc';
-      const isOpera = ua.includes('OPR') || ua.includes('Opera');
-      const isEdge = ua.includes('Edg');
-
-      return isChromium && isGoogle && !isOpera && !isEdge;
+      return ua.includes("Chrome") || ua.includes("Chromium") || ua.includes("Edg") || ua.includes("OPR");
     }
 
-    if (isRealChrome()) {
-      window.location.href = "nopermission.html"; // Block access if real Chrome
+    const errorBox = document.getElementById("errorBox");
+    const realContent = document.getElementById("realContent");
+
+    if (isChromium()) {
+      errorBox.style.display = "block";
+    } else {
+      realContent.style.display = "block";
     }
   </script>
+
 </body>
 </html>
