@@ -57,7 +57,7 @@
     }
 
     .btn {
-      margin-top: 25px;
+      margin-top: 20px;
       display: block;
       width: 100%;
       background-color: #000;
@@ -74,27 +74,63 @@
     .btn:hover {
       background-color: #333;
     }
+
+    .btn.secondary {
+      background-color: #e0e0e0;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .btn.secondary:hover {
+      background-color: #ccc;
+    }
+
+    .expired {
+      text-align: center;
+      font-size: 1.2rem;
+      color: red;
+      font-weight: bold;
+      padding: 30px;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="contentCard">
     <div class="logo">SHEIN | QR Ownership</div>
     <h2>Verified Purchaser Details:</h2>
     <p><strong>Name:</strong> Reanne May Sevilla Roquero</p>
     <p><strong>National ID Number:</strong> 3184-0346-8142-3948</p>
     <p><strong>Address:</strong> Purok 5, San Pablo, Jaen, Nueva Ecija</p>
-    <p><strong>RA Facebook Link: :</strong> https://www.facebook.com/share/1BFH2wSLTY/</p>
+    <p><strong>RA Facebook Link:</strong> https://www.facebook.com/share/1BFH2wSLTY/</p>
 
     <div class="receipt">
       Purchase # Receipt: <strong>2ibzirc0xerysp25</strong>
     </div>
 
-    <button class="btn" onclick="confirm()">Confirm</button>
+    <button class="btn" onclick="confirm()">Proceed</button>
+    <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
+  </div>
+
+  <div id="expiredMessage" class="expired" style="display: none;">
+    ⛔ This page has expired. Access is no longer available.
   </div>
 
   <script>
     function confirm() {
-      window.location.href = "http://bit.ly/3IcyFtk"; // Replace with your final event link
+      window.location.href = "http://bit.ly/3IcyFtk";
+    }
+
+    function checkExpiry() {
+      window.location.href = "countdown.html";
+    }
+
+    // EXPIRY CHECK
+    const expiryDate = new Date("2025-07-15T00:00:00");
+    const now = new Date();
+
+    if (now >= expiryDate) {
+      document.getElementById('contentCard').style.display = 'none';
+      document.getElementById('expiredMessage').style.display = 'block';
     }
   </script>
 </body>
