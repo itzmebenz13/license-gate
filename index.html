@@ -10,10 +10,39 @@
       padding: 0;
       background-color: #f5f5f5;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: #000;
+      padding: 10px;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .nav-item {
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: calc(100vh - 64px);
     }
 
     .card {
@@ -95,24 +124,35 @@
   </style>
 </head>
 <body>
-  <div class="card" id="contentCard">
-    <div class="logo">SHEIN | QR Ownership</div>
-    <h2>Verified Purchaser Details:</h2>
-    <p><strong>Name:</strong> Reanne May Sevilla Roquero</p>
-    <p><strong>National ID Number:</strong> 3184-0346-8142-3948</p>
-    <p><strong>Address:</strong> Purok 5, San Pablo, Jaen, Nueva Ecija</p>
-    <p><strong>RA Facebook Link:</strong> https://www.facebook.com/share/1BFH2wSLTY/</p>
-
-    <div class="receipt">
-      Purchase # Receipt: <strong>2ibzirc0xerysp25</strong>
-    </div>
-
-    <button class="btn" onclick="confirm()">Proceed</button>
-    <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
+  <!-- Navigation Menu -->
+  <div class="navbar">
+    <a href="nopermission.html" class="nav-item">PICK 3, 1 FREE</a>
+    <a href="nopermission.html" class="nav-item">5K NEW USER CREDITS</a>
+    <a href="nopermission.html" class="nav-item">3 FREE GIFTS</a>
+    <a href="nopermission.html" class="nav-item">CREDIT BACK</a>
+    <a href="nopermission.html" class="nav-item">DISCOUNT DASH (99% OFF)</a>
   </div>
 
-  <div id="expiredMessage" class="expired" style="display: none;">
-    ⛔ This page has expired. Access is no longer available.
+  <div class="container">
+    <div class="card" id="contentCard">
+      <div class="logo">SHEIN | QR Ownership</div>
+      <h2>Verified Purchaser Details:</h2>
+      <p><strong>Name:</strong> Reanne May Sevilla Roquero</p>
+      <p><strong>National ID Number:</strong> 3184-0346-8142-3948</p>
+      <p><strong>Address:</strong> Purok 5, San Pablo, Jaen, Nueva Ecija</p>
+      <p><strong>RA Facebook Link:</strong> https://www.facebook.com/share/1BFH2wSLTY/</p>
+
+      <div class="receipt">
+        Purchase # Receipt: <strong>2ibzirc0xerysp25</strong>
+      </div>
+
+      <button class="btn" onclick="confirm()">Confirm</button>
+      <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
+    </div>
+
+    <div id="expiredMessage" class="expired" style="display: none;">
+      ⛔ This page has expired. Access is no longer available.
+    </div>
   </div>
 
   <script>
