@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Browser Check</title>
+  <title>Exclusive Event Access</title>
   <style>
     body {
       margin: 0;
@@ -32,10 +32,6 @@
       font-size: 1.2rem;
     }
 
-    .content {
-      display: none;
-    }
-
     .btn {
       background-color: #000;
       color: #fff;
@@ -54,32 +50,30 @@
 </head>
 <body>
 
-  <div class="card" id="errorBox">
-    <div class="error">⛔ Sorry, this page is not available in Chromium-based browsers.</div>
-    <p>Please use Firefox or Safari to access this content.</p>
+  <div class="card" id="allowedBox">
+    <h2>🎉 Welcome!</h2>
+    <p>You are using the SHEIN app scanner.</p>
+    <a href="https://www.shein.com/event-link" class="btn">Enter Event</a>
   </div>
 
-  <div class="card content" id="realContent">
-    <h2>🎉 Welcome!</h2>
-    <p>You are using a supported browser.</p>
-    <a href="https://www.shein.com/event-link" class="btn">Go to Event</a>
+  <div class="card" id="blockedBox">
+    <div class="error">⛔ Access Denied</div>
+    <p>This page is only accessible from the official SHEIN app.</p>
   </div>
 
   <script>
-    function isChromium() {
-      const ua = navigator.userAgent;
-      return ua.includes("Chrome") || ua.includes("Chromium") || ua.includes("Edg") || ua.includes("OPR");
-    }
+    const userAgent = navigator.userAgent.toLowerCase();
+    const allowedBox = document.getElementById("allowedBox");
+    const blockedBox = document.getElementById("blockedBox");
 
-    const errorBox = document.getElementById("errorBox");
-    const realContent = document.getElementById("realContent");
+    // Try to detect SHEIN in-app browser
+    const isSheinApp = userAgent.includes("shein") || userAgent.includes("zzkko");
 
-    if (isChromium()) {
-      errorBox.style.display = "block";
+    if (isSheinApp) {
+      allowedBox.style.display = "block";
     } else {
-      realContent.style.display = "block";
+      blockedBox.style.display = "block";
     }
   </script>
-
 </body>
 </html>
