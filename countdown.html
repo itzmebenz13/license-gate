@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Code Expiry Countdown</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .countdown {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .label {
+      margin-top: 15px;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">SHEIN | QR Expiry</div>
+    <h2>Time Remaining Until Expiry</h2>
+    <div class="countdown" id="countdown">Loading...</div>
+    <div class="label">QR code expires on <strong>July 15, 2025</strong></div>
+  </div>
+
+  <script>
+    const countdownElement = document.getElementById('countdown');
+    const targetDate = new Date('2025-07-15T00:00:00');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        countdownElement.innerHTML = '⛔ Expired';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
