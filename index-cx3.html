@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SHEIN QR Purchase Confirmation</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background-color: #000;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none;
+    }
+
+    .nav-items {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-item {
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-items {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      .nav-items.show {
+        display: flex;
+      }
+
+      .nav-item {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 64px);
+      padding: 20px;
+    }
+
+    .card, .error-box {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: left;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    p {
+      font-size: 0.95rem;
+      margin: 6px 0;
+      color: #444;
+    }
+
+    .receipt {
+      background: #f0f0f0;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-family: monospace;
+      color: #000;
+    }
+
+    .btn {
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+      background-color: #000;
+      color: #fff;
+      padding: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #333;
+    }
+
+    .btn.secondary {
+      background-color: #e0e0e0;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    .btn.secondary:hover {
+      background-color: #ccc;
+    }
+
+    .expired, .error-message {
+      text-align: center;
+      font-size: 1.1rem;
+      color: red;
+      font-weight: bold;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Menu -->
+  <div class="navbar">
+    <span style="color: #fff; font-weight: bold;">SHEIN</span>
+    <button class="nav-toggle" onclick="toggleMenu()">☰</button>
+  </div>
+  <div class="nav-items" id="navItems">
+    <a href="nopermission.html" class="nav-item">PICK 3, 1 FREE</a>
+    <a href="nopermission.html" class="nav-item">5K NEW USER CREDITS</a>
+    <a href="nopermission.html" class="nav-item">3 FREE GIFTS</a>
+    <a href="nopermission.html" class="nav-item">CREDIT BACK</a>
+    <a href="nopermission.html" class="nav-item">DISCOUNT DASH (99% OFF)</a>
+  </div>
+
+  <div class="container">
+    <!-- Main Content -->
+    <div class="card" id="contentCard" style="display: none;">
+      <div class="logo">SHEIN | QR Ownership</div>
+      <h2>Verified Purchaser Details:</h2>
+      <p><strong>Name:</strong> reserved</p>
+      <p><strong>RA Facebook Link:</strong> reserved</p>
+      <div class="receipt">Purchase # Receipt: <strong>cpsyrex-00003</strong></div>
+      <button class="btn" onclick="confirm()">Confirm</button>
+      <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
+    </div>
+
+    <!-- Error Message for Blocked Browsers -->
+    <div class="error-box" id="errorBox" style="display: none;">
+      <div class="logo">ACCESS BLOCKED</div>
+      <p class="error-message">⛔ Error! Please use the SHEIN app to access this event.</p>
+    </div>
+
+    <!-- Expired Message -->
+    <div id="expiredMessage" class="expired" style="display: none;">
+      ⛔ This page has expired. Access is no longer available.
+    </div>
+  </div>
+
+  <script>
+    function confirm() {
+      window.location.href = "https://itzmebenz13.github.io/final-gate/index-cx3.html";
+    }
+
+    function checkExpiry() {
+      window.location.href = "countdown.html";
+    }
+
+    function toggleMenu() {
+      document.getElementById("navItems").classList.toggle("show");
+    }
+
+    // SHEIN App Detection
+    const ua = navigator.userAgent.toLowerCase();
+    const isShein = ua.includes("shein") || ua.includes("zzkko");
+    const now = new Date();
+    const expiryDate = new Date("2025-07-15T00:00:00");
+
+    if (now >= expiryDate) {
+      document.getElementById("expiredMessage").style.display = "block";
+    } else if (isShein) {
+      document.getElementById("contentCard").style.display = "block";
+    } else {
+      document.getElementById("errorBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
