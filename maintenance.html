@@ -11,6 +11,7 @@
       color: #eee;
       font-family: Arial, sans-serif;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -20,12 +21,53 @@
       max-width: 400px;
       padding: 20px;
     }
+    #countdown {
+      font-size: 1.5rem;
+      margin-top: 10px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .note {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #bbb;
+    }
   </style>
 </head>
 <body>
   <div class="message">
     <h2>Under Maintenance</h2>
-    <p>This event is temporarily unavailable due to a 3-hour security maintenance.<br><br>This event will be back soon — thanks for understanding!</p>
+    <p>This event is currently unavailable due to a 12-hour maintenance for security purposes.<br><br>We’ll be back soon — thank you for your patience!</p>
+    <div id="countdown">Loading timer...</div>
+    <div class="note">Please reach out to the QR code issuer to request exclusive access.</div>
   </div>
+
+  <script>
+    // Set the end time (12 hours from now)
+    const endTime = new Date(Date.now() + 12 * 60 * 60 * 1000);
+
+    function updateCountdown() {
+      const now = new Date();
+      const distance = endTime - now;
+
+      if (distance <= 0) {
+        document.body.innerHTML = '';
+        window.location.href = 'https://itzmebenz13.github.io/gate-2';
+        return;
+      }
+
+      const hours = Math.floor(distance / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerText =
+        `Time remaining: ${String(hours).padStart(2, '0')}h ` +
+        `${String(minutes).padStart(2, '0')}m ` +
+        `${String(seconds).padStart(2, '0')}s`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
 </body>
 </html>
