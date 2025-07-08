@@ -31,8 +31,18 @@
       letter-spacing: 2px;
     }
 
+    .glow-box {
+      padding: 16px 24px;
+      border: 2px solid #ff0033;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff0033;
+      animation: pulse-red 1.5s infinite alternate;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
     #countdown {
-      font-size: 2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       letter-spacing: 0.1em;
       animation: flicker 1.5s infinite alternate;
@@ -60,6 +70,11 @@
       100% { transform: translate(0); }
     }
 
+    @keyframes pulse-red {
+      0% { box-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033; }
+      100% { box-shadow: 0 0 20px #ff3366, 0 0 40px #ff3366; }
+    }
+
     .glitch {
       animation: glitch 0.3s infinite;
     }
@@ -67,9 +82,11 @@
 </head>
 <body>
   <div class="container">
-    <h1 class="glitch">⚠ ACCESS PENDING ⚠</h1>
-    <div id="countdown" class="glitch">LOADING...</div>
-    <div class="label">Countdown to protocol expiry – 100 years from initialization</div>
+    <h1 class="glitch">⚠ ACCESS EXPIRY ⚠</h1>
+    <div class="glow-box">
+      <div id="countdown" class="glitch">LOADING...</div>
+    </div>
+    <div class="label">Countdown to access expiry – 100 years from initialization.</div>
   </div>
 
   <script>
