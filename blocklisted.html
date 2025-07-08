@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Access Denied</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      font-family: Arial, sans-serif;
+      color: #00ff88;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    .container {
+      z-index: 1;
+      position: relative;
+      padding-top: 20vh;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      color: #ff4444;
+      text-shadow: 0 0 8px #ff4444;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #aaffcc;
+      margin-top: 10px;
+    }
+
+    .important {
+      color: #ff5555;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="container">
+    <h2>⛔ Access Blocked</h2>
+    <p>Your IP address appears on our blocklist.</p>
+    <p class="important">To regain access, please provide your IP address to the administrator.</p>
+    <p>You may also try again using a different network or device.</p>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = canvas.width / 20;
+    const drops = Array(Math.floor(columns)).fill(1);
+    const chars = "アァイィウヴエェオカサタナハマヤラワ0123456789";
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ff88";
+      ctx.font = "16px monospace";
+
+      drops.forEach((y, i) => {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        const x = i * 20;
+        ctx.fillText(text, x, y * 20);
+        if (y * 20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      });
+    }
+
+    setInterval(drawMatrix, 33);
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
