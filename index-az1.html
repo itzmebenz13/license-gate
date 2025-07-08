@@ -217,7 +217,7 @@
     const ua = navigator.userAgent.toLowerCase();
     const isShein = ua.includes("shein") || ua.includes("zzkko");
     const now = new Date();
-    const expiryDate = new Date("2025-07-15T00:00:00");
+    const expiryDate = new Date("2050-07-15T00:00:00");
 
     if (now >= expiryDate) {
       document.getElementById("expiredMessage").style.display = "block";
