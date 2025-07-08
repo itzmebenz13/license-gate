@@ -19,6 +19,7 @@
       top: 0;
       left: 0;
       z-index: 0;
+      opacity: 0.5; /* 50% background */
     }
 
     .container {
@@ -38,6 +39,7 @@
       font-size: 2rem;
       text-transform: uppercase;
       letter-spacing: 2px;
+      animation: neonPulse 2s ease-in-out infinite alternate;
     }
 
     .glow-box {
@@ -69,22 +71,14 @@
       100% { opacity: 1; text-shadow: 0 0 6px #00ff88, 0 0 12px #00ff88; }
     }
 
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-1px, 1px); }
-      40% { transform: translate(1px, -1px); }
-      60% { transform: translate(-1px, -1px); }
-      80% { transform: translate(1px, 1px); }
-      100% { transform: translate(0); }
-    }
-
     @keyframes pulse-red {
       0% { box-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033; }
       100% { box-shadow: 0 0 20px #ff3366, 0 0 40px #ff3366; }
     }
 
-    .glitch {
-      animation: glitch 0.3s infinite;
+    @keyframes neonPulse {
+      0% { text-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88; color: #00ff88; }
+      100% { text-shadow: 0 0 16px #00ffaa, 0 0 32px #00ffaa; color: #00ffaa; }
     }
   </style>
 </head>
@@ -92,9 +86,9 @@
   <canvas id="matrix"></canvas>
 
   <div class="container">
-    <h1 class="glitch">⚠ ACCESS EXPIRY ⚠</h1>
+    <h1>⚠ ACCESS EXPIRY ⚠</h1>
     <div class="glow-box">
-      <div id="countdown" class="glitch">LOADING...</div>
+      <div id="countdown">LOADING...</div>
     </div>
     <div class="label">Countdown to access expiry – 100 years from initialization.</div>
   </div>
