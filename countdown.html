@@ -5,28 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ACCESS MONITOR</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: #000;
-      color: #00ff88;
-      font-family: 'Courier New', Courier, monospace;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: black;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
-      text-align: center;
+      height: 100%;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
     }
 
     .container {
-      max-width: 600px;
+      z-index: 1;
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #00ff88;
       padding: 20px;
     }
 
     h1 {
       font-size: 2rem;
-      margin-bottom: 1rem;
       text-transform: uppercase;
       letter-spacing: 2px;
     }
@@ -37,7 +46,6 @@
       border-radius: 10px;
       box-shadow: 0 0 10px #ff0033;
       animation: pulse-red 1.5s infinite alternate;
-      display: inline-block;
       margin-top: 10px;
     }
 
@@ -81,6 +89,8 @@
   </style>
 </head>
 <body>
+  <canvas id="matrix"></canvas>
+
   <div class="container">
     <h1 class="glitch">⚠ ACCESS EXPIRY ⚠</h1>
     <div class="glow-box">
@@ -90,6 +100,7 @@
   </div>
 
   <script>
+    // Countdown logic
     const countdown = document.getElementById("countdown");
     const now = new Date();
     const targetDate = new Date(now.getFullYear() + 100, now.getMonth(), now.getDate());
@@ -100,8 +111,6 @@
 
       if (diff <= 0) {
         countdown.textContent = "⛔ ACCESS EXPIRED";
-        // Optional redirect
-        // window.location.href = "https://itzmebenz13.github.io/gate-2";
         return;
       }
 
@@ -112,12 +121,46 @@
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
 
-      countdown.textContent =
-        `${years}y ${days}d ${hours}h ${minutes}m ${seconds}s`;
+      countdown.textContent = `${years}y ${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    // Matrix background
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = canvas.width / 20;
+    const drops = Array(Math.floor(columns)).fill(1);
+    const characters = "アァイィウヴエェオカサタナハマヤラワ0123456789";
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ff88";
+      ctx.font = "16px monospace";
+
+      drops.forEach((y, i) => {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const x = i * 20;
+        ctx.fillText(text, x, y * 20);
+
+        if (y * 20 > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      });
+    }
+
+    setInterval(drawMatrix, 33);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
 </html>
