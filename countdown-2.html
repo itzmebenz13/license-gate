@@ -99,7 +99,7 @@
     <div class="glow-box">
       <div id="countdown">LOADING...</div>
     </div>
-    <div class="label">Countdown to access expiry – 7 days from initialization.</div>
+    <div class="label">Countdown to access expiry – 7 days from now.</div>
     <div class="lose-access-message">
         You still have ₱1,000 unpaid balance. Upon expiry, your exclusive QR link will become inactive.
     </div>
@@ -109,7 +109,7 @@
     // Countdown logic
     const countdown = document.getElementById("countdown");
     const now = new Date();
-    // Set the target date to 7 days from now
+    // Set the target date to exactly 7 days from the current time of page load.
     const targetDate = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000));
 
     function updateCountdown() {
