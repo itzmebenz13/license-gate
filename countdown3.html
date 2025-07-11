@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ACCESS MONITOR</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    .container {
+      z-index: 1;
+      position: relative;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #00ff88;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      animation: neonPulse 2s ease-in-out infinite alternate;
+    }
+
+    .glow-box {
+      padding: 16px 24px;
+      border: 2px solid #00ff88; /* Changed border color for permanent access */
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff88; /* Changed box-shadow for permanent access */
+      animation: pulse-green 1.5s infinite alternate; /* New animation for green pulse */
+      margin-top: 10px;
+    }
+
+    #countdown {
+      font-size: 1.1rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    .label {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #00ffaa;
+      opacity: 0.7;
+    }
+
+    .permanent-access-message {
+        margin-top: 20px;
+        font-size: 1rem;
+        color: #00ffaa;
+        text-shadow: 0 0 5px #00ffaa;
+        font-weight: bold;
+        animation: neonPulse 2s infinite alternate;
+    }
+
+
+    @keyframes flicker {
+      0% { opacity: 1; text-shadow: 0 0 4px #00ff88, 0 0 8px #00ff88; }
+      50% { opacity: 0.7; text-shadow: 0 0 2px #00ff88; }
+      100% { opacity: 1; text-shadow: 0 0 6px #00ff88, 0 0 12px #00ff88; }
+    }
+
+    @keyframes pulse-green { /* New animation for a green pulse effect */
+      0% { box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88; }
+      100% { box-shadow: 0 0 20px #33ffaa, 0 0 40px #33ffaa; }
+    }
+
+    @keyframes neonPulse {
+      0% { text-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88; color: #00ff88; }
+      100% { text-shadow: 0 0 16px #00ffaa, 0 0 32px #00ffaa; color: #00ffaa; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <div class="container">
+    <h1>✅ ACCESS GRANTED ✅</h1>
+    <div class="glow-box">
+      <div id="countdown">Your access is permanent. Enjoy!</div>
+    </div>
+    <div class="label">No expiry date for your access.</div>
+    <div class="permanent-access-message">
+        Your access is permanent. Enjoy!
+    </div>
+  </div>
+
+  <script>
+    const countdown = document.getElementById("countdown");
+    const permanentAccessMessage = document.querySelector(".permanent-access-message");
+    const accessHeading = document.querySelector("h1");
+    const glowBox = document.querySelector(".glow-box");
+    const label = document.querySelector(".label");
+
+    // Set permanent access
+    countdown.textContent = "Your access is permanent. Enjoy!";
+    permanentAccessMessage.style.display = "block"; // Ensure the permanent message is shown
+    accessHeading.textContent = "✅ ACCESS GRANTED ✅"; // Change the main heading
+    label.textContent = "No expiry date for your access."; // Change the label text
+
+    // Update glow-box and countdown styles for permanent access
+    glowBox.style.borderColor = "#00ff88";
+    glowBox.style.boxShadow = "0 0 10px #00ff88";
+    glowBox.style.animation = "pulse-green 1.5s infinite alternate";
+
+
+    // Matrix background animation (no changes needed here)
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = canvas.width / 20;
+    const drops = Array(Math.floor(columns)).fill(1);
+    const characters = "アァイィウヴエェオカサタナハマヤラワ0123456789";
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ff88";
+      ctx.font = "16px monospace";
+
+      drops.forEach((y, i) => {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const x = i * 20;
+        ctx.fillText(text, x, y * 20);
+
+        if (y * 20 > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      });
+    }
+
+    setInterval(drawMatrix, 33);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
