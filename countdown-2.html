@@ -19,7 +19,7 @@
       top: 0;
       left: 0;
       z-index: 0;
-      opacity: 0.5; /* 50% background */
+      opacity: 0.5;
     }
 
     .container {
@@ -68,10 +68,10 @@
     .lose-access-message {
         margin-top: 20px;
         font-size: 1rem;
-        color: #ff0033; /* Red color for warning */
-        text-shadow: 0 0 5px #ff0033; /* Subtle glow */
+        color: #ff0033;
+        text-shadow: 0 0 5px #ff0033;
         font-weight: bold;
-        animation: pulse-red 2s infinite alternate; /* Reusing pulse-red for emphasis */
+        animation: pulse-red 2s infinite alternate;
     }
 
     @keyframes flicker {
@@ -99,18 +99,17 @@
     <div class="glow-box">
       <div id="countdown">LOADING...</div>
     </div>
-    <div class="label">Countdown to access expiry – 7 days from now.</div>
+    <div class="label">Countdown to access expiry – based on fixed date.</div>
     <div class="lose-access-message">
         You still have ₱1,000 unpaid balance. Upon expiry, your exclusive QR link will become inactive.
     </div>
   </div>
 
   <script>
-    // Countdown logic
     const countdown = document.getElementById("countdown");
-    const now = new Date();
-    // Set the target date to exactly 7 days from the current time of page load.
-    const targetDate = new Date(now.getTime() + (7 * 24 * 60 * 60 * 1000));
+
+    // 🔒 Set your fixed expiry date here
+    const targetDate = new Date("2025-07-18T00:00:00");
 
     function updateCountdown() {
       const current = new Date();
@@ -133,7 +132,7 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // Matrix background
+    // Matrix background animation
     const canvas = document.getElementById("matrix");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
