@@ -3,13 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SHEIN QR Purchase Confirmation</title>
+  <title>SHEIN QR Access</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      color: #00ff88;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      opacity: 0.5;
     }
 
     .navbar {
@@ -18,12 +28,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #00ff88;
+      z-index: 2;
+      position: relative;
     }
 
     .nav-toggle {
       background: none;
       border: none;
-      color: #fff;
+      color: #00ff88;
       font-size: 1.5rem;
       cursor: pointer;
       display: none;
@@ -34,60 +47,55 @@
       gap: 10px;
       flex-wrap: wrap;
       justify-content: center;
+      padding: 10px;
+      border-top: 1px solid #00ff88;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2;
+      position: relative;
     }
 
     .nav-item {
-      background-color: #fff;
-      color: #000;
-      font-weight: bold;
-      border: none;
+      background-color: transparent;
+      color: #00ff88;
+      border: 1px solid #00ff88;
       border-radius: 6px;
       padding: 10px 16px;
       font-size: 0.85rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     .nav-item:hover {
-      background-color: #f0f0f0;
+      background-color: #00ff8833;
     }
 
     @media (max-width: 768px) {
-      .nav-toggle {
-        display: block;
-      }
-
+      .nav-toggle { display: block; }
       .nav-items {
         display: none;
         flex-direction: column;
         width: 100%;
-        margin-top: 10px;
       }
-
-      .nav-items.show {
-        display: flex;
-      }
-
-      .nav-item {
-        width: 100%;
-        text-align: center;
-      }
+      .nav-items.show { display: flex; }
+      .nav-item { width: 100%; text-align: center; }
     }
-
-    .container {
+        .container {
       display: flex;
       justify-content: center;
       align-items: center;
       height: calc(100vh - 64px);
       padding: 20px;
+      z-index: 2;
+      position: relative;
     }
 
     .card, .error-box {
-      background-color: #fff;
+      background-color: rgba(0, 0, 0, 0.85);
+      border: 1px solid #00ff88;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px #00ff88aa;
       text-align: left;
       max-width: 450px;
       width: 100%;
@@ -98,40 +106,38 @@
       font-size: 1.4rem;
       text-align: center;
       margin-bottom: 20px;
-      color: #000;
+      color: #00ff88;
+      text-shadow: 0 0 5px #00ff88;
     }
 
     h2 {
       font-size: 1.1rem;
       margin-bottom: 10px;
-      color: #222;
     }
 
     p {
       font-size: 0.95rem;
       margin: 6px 0;
-      color: #444;
     }
 
     .receipt {
-      background: #f0f0f0;
+      background: #001f1f;
       padding: 10px 15px;
       border-radius: 6px;
       margin-top: 15px;
       font-size: 0.95rem;
       font-family: monospace;
-      color: #000;
     }
 
     .btn {
       margin-top: 20px;
       display: block;
       width: 100%;
-      background-color: #000;
-      color: #fff;
+      background-color: transparent;
+      color: #00ff88;
       padding: 14px;
       font-weight: bold;
-      border: none;
+      border: 1px solid #00ff88;
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
@@ -139,34 +145,78 @@
     }
 
     .btn:hover {
-      background-color: #333;
+      background-color: #00ff8833;
     }
 
     .btn.secondary {
-      background-color: #e0e0e0;
-      color: #333;
+      background-color: transparent;
+      color: #00ff88;
       margin-top: 10px;
     }
 
     .btn.secondary:hover {
-      background-color: #ccc;
+      background-color: #003333;
     }
 
     .expired, .error-message {
       text-align: center;
       font-size: 1.1rem;
-      color: red;
+      color: #ff4444;
       font-weight: bold;
       padding: 20px;
+    }
+    .terms {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+        cursor: pointer; /* Makes the entire label clickable */
+    }
+
+    .terms a {
+        color: #00ff88;
+        text-decoration: underline;
+    }
+
+    /* Hide the default checkbox */
+    .terms input[type="checkbox"] {
+        display: none;
+    }
+    
+    /* Create a custom checkbox */
+    .terms label::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #00ff88;
+        background-color: #000;
+        border-radius: 3px;
+        margin-right: 10px;
+        vertical-align: middle; /* Align with text */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Style for when the checkbox is checked */
+    .terms input[type="checkbox"]:checked + label::before {
+        background-color: #00ff88;
+        content: '✓'; /* Checkmark character */
+        font-size: 14px;
+        color: #000;
+        text-align: center;
+        line-height: 16px; /* Center the checkmark */
+        font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <!-- Navigation Menu -->
+  <canvas id="matrix"></canvas>
+
   <div class="navbar">
-    <span style="color: #fff; font-weight: bold;">SHEIN</span>
+    <span style="color: #00ff88; font-weight: bold;">SHEIN</span>
     <button class="nav-toggle" onclick="toggleMenu()">☰</button>
   </div>
+
   <div class="nav-items" id="navItems">
     <a href="nopermission.html" class="nav-item">PICK 3, 1 FREE</a>
     <a href="nopermission.html" class="nav-item">5K NEW USER CREDITS</a>
@@ -176,47 +226,50 @@
   </div>
 
   <div class="container">
-    <!-- Main Content -->
     <div class="card" id="contentCard" style="display: none;">
       <div class="logo">SHEIN | QR Ownership</div>
       <h2>Verified Purchaser Details:</h2>
-      <p><strong>Name:</strong> Selene Pormada</p>
-      <p><strong>Facebook Link:</strong> https://www.facebook.com/pein.tea.9</p>
-      <div class="receipt">Purchase # Receipt: <strong>cpsyrex-00004</strong></div>
-      <button class="btn" onclick="confirm()">Confirm</button>
+      <p><strong>Name:</strong> SELENE PORMADA</p>
+      <p><strong>RA Facebook Link:</strong> (hidden, encrypted)</p>
+      <div class="receipt">Purchase # Receipt: <strong>calix-00005</strong></div>
+      <div class="terms">
+        <input type="checkbox" id="termsCheckbox">
+        <label for="termsCheckbox">I agree to the <a href="tos.html" target="_blank">Terms and Conditions</a></label>
+      </div>
+      <button class="btn" onclick="confirmAction()">Confirm</button>
       <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
     </div>
 
-    <!-- Error Message for Blocked Browsers -->
     <div class="error-box" id="errorBox" style="display: none;">
       <div class="logo">ACCESS BLOCKED</div>
-      <p class="error-message">⛔ Error! Please use the SHEIN app to access this event.</p>
+      <p class="error-message">⛔ Error! Please use SHEIN app to access this event.</p>
     </div>
 
-    <!-- Expired Message -->
     <div id="expiredMessage" class="expired" style="display: none;">
       ⛔ This page has expired. Access is no longer available.
     </div>
   </div>
-
-  <script>
-    function confirm() {
-      window.location.href = "https://itzmebenz13.github.io/final-gate/index-dw4.html";
+    <script>
+    function confirmAction() {
+      if (document.getElementById('termsCheckbox').checked) {
+        window.location.href = "https://itzmebenz13.github.io/final-gate/index-dw4.html";
+      } else {
+        alert("Please agree to the TOS before proceeding.");
+      }
     }
 
     function checkExpiry() {
-      window.location.href = "countdown.html";
+      window.location.href = "countdown3.html";
     }
 
     function toggleMenu() {
       document.getElementById("navItems").classList.toggle("show");
     }
 
-    // SHEIN App Detection
     const ua = navigator.userAgent.toLowerCase();
     const isShein = ua.includes("shein") || ua.includes("zzkko");
     const now = new Date();
-    const expiryDate = new Date("2025-07-15T00:00:00");
+    const expiryDate = new Date("2050-07-15T00:00:00");
 
     if (now >= expiryDate) {
       document.getElementById("expiredMessage").style.display = "block";
@@ -225,6 +278,42 @@
     } else {
       document.getElementById("errorBox").style.display = "block";
     }
+
+    // Matrix background animation
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = canvas.width / 20;
+    const drops = Array(Math.floor(columns)).fill(1);
+    const characters = "アァイィウヴエェオカサタナハマヤラワ0123456789";
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#00ff88";
+      ctx.font = "16px monospace";
+
+      drops.forEach((y, i) => {
+        const text = characters.charAt(Math.floor(Math.random() * characters.length));
+        const x = i * 20;
+        ctx.fillText(text, x, y * 20);
+
+        if (y * 20 > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      });
+    }
+
+    setInterval(drawMatrix, 33);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
   </script>
 </body>
 </html>
