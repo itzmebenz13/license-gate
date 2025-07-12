@@ -1,0 +1,83 @@
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    const clientIP = request.headers.get("cf-connecting-ip") || "unknown";
+
+    // Define specific IP addresses to always whitelist
+    const alwaysWhitelistedIPs = [
+      // Add specific, full IP addresses here if needed, e.g., "192.168.1.100"
+    ];
+
+    // Define IP address prefixes to whitelist
+    const whitelistedPrefixes = [
+      "210.23.", // Only whitelist IPs starting with 210.23
+    ];
+
+    let isAllowed = false;
+
+    // 1. Check if the IP is in the always whitelisted specific IPs (exact match)
+    if (alwaysWhitelistedIPs.includes(clientIP)) {
+      isAllowed = true;
+    } else {
+      // 2. Check if the IP starts with any of the whitelisted prefixes
+      for (const prefix of whitelistedPrefixes) {
+        if (clientIP.startsWith(prefix)) {
+          isAllowed = true;
+          break; // No need to check further prefixes if one matches
+        }
+      }
+    }
+
+    // Basic IPv4 validation
+    const isIPv4 = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/.test(clientIP);
+
+    // --- Core Logic ---
+
+    // If the IP is whitelisted and valid, redirect to the main content
+    if (isAllowed && isIPv4) {
+      return Response.redirect("https://itzmebenz13.github.io/license-gate/index-user16.html", 302);
+    }
+
+    // If the IP is NOT whitelisted, redirect to the payment required page
+    if (url.pathname !== "/payment-required") {
+        return Response.redirect(`${url.origin}/payment-required`, 302);
+    }
+
+    // --- Serve the Payment Required Page if the path matches ---
+    if (url.pathname === "/payment-required") {
+        return new Response(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000; /* Black background */
+      color: #FF4500; /* Orange-red text for urgency */
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh; /* Full viewport height */
+      text-align: center;
+      font-size: 1.5rem; /* Larger font for direct message */
+      box-sizing: border-box;
+      padding: 1rem; /* A little padding just in case */
+    }
+  </style>
+</head>
+<body>
+  Please settle your payment in order to continue using your access.
+</body>
+</html>`, {
+            status: 403,
+            headers: { "Content-Type": "text/html" }
+        });
+    }
+
+    // Fallback response for unrecognized paths (unlikely to be hit by non-whitelisted IPs due to redirect)
+    return new Response("Not Found", { status: 404 });
+  }
+};
