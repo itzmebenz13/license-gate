@@ -165,6 +165,48 @@
       font-weight: bold;
       padding: 20px;
     }
+    .terms {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+        cursor: pointer; /* Makes the entire label clickable */
+    }
+
+    .terms a {
+        color: #00ff88;
+        text-decoration: underline;
+    }
+
+    /* Hide the default checkbox */
+    .terms input[type="checkbox"] {
+        display: none;
+    }
+    
+    /* Create a custom checkbox */
+    .terms label::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #00ff88;
+        background-color: #000;
+        border-radius: 3px;
+        margin-right: 10px;
+        vertical-align: middle; /* Align with text */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Style for when the checkbox is checked */
+    .terms input[type="checkbox"]:checked + label::before {
+        background-color: #00ff88;
+        content: '✓'; /* Checkmark character */
+        font-size: 14px;
+        color: #000;
+        text-align: center;
+        line-height: 16px; /* Center the checkmark */
+        font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -188,9 +230,13 @@
       <div class="logo">SHEIN | QR Ownership</div>
       <h2>Verified Purchaser Details:</h2>
       <p><strong>Name:</strong> REANNE MAY SEVILLA ROQUERO</p>
-      <p><strong>RA Facebook Link:</strong> Hidden</p>
-      <div class="receipt">Purchase # Receipt: <strong>cpsyrex-00001</strong></div>
-      <button class="btn" onclick="confirm()">Confirm</button>
+      <p><strong>RA Facebook Link:</strong> (hidden, encrypted)</p>
+      <div class="receipt">Purchase # Receipt: <strong>calix-00001</strong></div>
+      <div class="terms">
+        <input type="checkbox" id="termsCheckbox">
+        <label for="termsCheckbox">I agree to the <a href="tos.html" target="_blank">Terms and Conditions</a></label>
+      </div>
+      <button class="btn" onclick="confirmAction()">Confirm</button>
       <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
     </div>
 
@@ -204,12 +250,16 @@
     </div>
   </div>
     <script>
-    function confirm() {
-      window.location.href = "https://itzmebenz13.github.io/final-gate/";
+    function confirmAction() {
+      if (document.getElementById('termsCheckbox').checked) {
+        window.location.href = "https://itzmebenz13.github.io/final-gate";
+      } else {
+        alert("Please agree to the TOS before proceeding.");
+      }
     }
 
     function checkExpiry() {
-      window.location.href = "countdown.html";
+      window.location.href = "countdown3.html";
     }
 
     function toggleMenu() {
