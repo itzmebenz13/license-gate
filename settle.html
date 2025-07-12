@@ -2,75 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Access Verification</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Important Message</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #000;
-      color: #00ff88;
+      background: #000; /* Black background */
+      color: #FF4500; /* Orange-red for the message, stands out */
       font-family: 'Courier New', monospace;
       display: flex;
-      justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      justify-content: center;
+      min-height: 100vh; /* Make sure it takes full screen height */
       text-align: center;
-    }
-    .loading-message {
-      font-size: 1.5rem;
-      text-shadow: 0 0 8px #00ff88;
+      font-size: 1.5rem; /* Large font size for readability */
+      box-sizing: border-box;
+      padding: 1rem; /* A little padding around the message */
     }
   </style>
 </head>
 <body>
-  <div class="loading-message">Verifying your access... Please wait.</div>
-
-  <script>
-    // *******************************************************************
-    // *** IMPORTANT SECURITY WARNING:                               ***
-    // *** This IP checking method is client-side (in the browser).    ***
-    // *** It is for DISPLAY PURPOSES ONLY and offers NO REAL SECURITY.***
-    // *** A user can bypass this by disabling JavaScript, spoofing IP,***
-    // *** or directly accessing the target HTML files.                ***
-    // *** For true security, you MUST use a server-side solution.     ***
-    // *******************************************************************
-
-    const allowedIPPrefix = "210.23."; // The IP prefix to whitelist
-    const allowedPage = "index-user16.html"; // The page for whitelisted users
-    const deniedPage = "settle.html";        // The page for non-whitelisted users (payment required)
-
-    async function checkIPAndRedirect() {
-      let clientIP = null;
-      try {
-        // Use a public API to get the user's IP address.
-        // ipify.org is a common, free service. Be mindful of potential rate limits
-        // if your site has extremely high traffic.
-        const response = await fetch('https://api.ipify.org?format=json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        clientIP = data.ip;
-        console.log("Detected IP:", clientIP); // For debugging
-      } catch (error) {
-        console.error("Could not fetch IP address:", error);
-        // If IP fetching fails, default to denying access (more secure than allowing)
-        window.location.href = deniedPage;
-        return;
-      }
-
-      if (clientIP && clientIP.startsWith(allowedIPPrefix)) {
-        console.log("IP is whitelisted. Redirecting to allowed page."); // For debugging
-        window.location.href = allowedPage;
-      } else {
-        console.log("IP is NOT whitelisted. Redirecting to denied page."); // For debugging
-        window.location.href = deniedPage;
-      }
-    }
-
-    // Execute the IP check and redirection when the page loads
-    checkIPAndRedirect();
-  </script>
+  Please settle your payment in order to continue using your access.
 </body>
 </html>
