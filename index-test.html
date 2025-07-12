@@ -170,15 +170,42 @@
         align-items: center;
         margin-top: 20px;
         font-size: 0.85rem;
-    }
-
-    .terms input {
-        margin-right: 10px;
+        cursor: pointer; /* Makes the entire label clickable */
     }
 
     .terms a {
         color: #00ff88;
         text-decoration: underline;
+    }
+
+    /* Hide the default checkbox */
+    .terms input[type="checkbox"] {
+        display: none;
+    }
+    
+    /* Create a custom checkbox */
+    .terms label::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #00ff88;
+        background-color: #000;
+        border-radius: 3px;
+        margin-right: 10px;
+        vertical-align: middle; /* Align with text */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Style for when the checkbox is checked */
+    .terms input[type="checkbox"]:checked + label::before {
+        background-color: #00ff88;
+        content: '✓'; /* Checkmark character */
+        font-size: 14px;
+        color: #000;
+        text-align: center;
+        line-height: 16px; /* Center the checkmark */
+        font-weight: bold;
     }
   </style>
 </head>
