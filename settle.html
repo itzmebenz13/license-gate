@@ -1,83 +1,76 @@
-export default {
-  async fetch(request) {
-    const url = new URL(request.url);
-    const clientIP = request.headers.get("cf-connecting-ip") || "unknown";
-
-    // Define specific IP addresses to always whitelist
-    const alwaysWhitelistedIPs = [
-      // Add specific, full IP addresses here if needed, e.g., "192.168.1.100"
-    ];
-
-    // Define IP address prefixes to whitelist
-    const whitelistedPrefixes = [
-      "210.23.", // Only whitelist IPs starting with 210.23
-    ];
-
-    let isAllowed = false;
-
-    // 1. Check if the IP is in the always whitelisted specific IPs (exact match)
-    if (alwaysWhitelistedIPs.includes(clientIP)) {
-      isAllowed = true;
-    } else {
-      // 2. Check if the IP starts with any of the whitelisted prefixes
-      for (const prefix of whitelistedPrefixes) {
-        if (clientIP.startsWith(prefix)) {
-          isAllowed = true;
-          break; // No need to check further prefixes if one matches
-        }
-      }
-    }
-
-    // Basic IPv4 validation
-    const isIPv4 = /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/.test(clientIP);
-
-    // --- Core Logic ---
-
-    // If the IP is whitelisted and valid, redirect to the main content
-    if (isAllowed && isIPv4) {
-      return Response.redirect("https://itzmebenz13.github.io/license-gate/index-user16.html", 302);
-    }
-
-    // If the IP is NOT whitelisted, redirect to the payment required page
-    if (url.pathname !== "/payment-required") {
-        return Response.redirect(`${url.origin}/payment-required`, 302);
-    }
-
-    // --- Serve the Payment Required Page if the path matches ---
-    if (url.pathname === "/payment-required") {
-        return new Response(`<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Access Verification</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #000; /* Black background */
-      color: #FF4500; /* Orange-red text for urgency */
+      background: #000;
+      color: #00ff88;
       font-family: 'Courier New', monospace;
       display: flex;
-      align-items: center;
       justify-content: center;
-      min-height: 100vh; /* Full viewport height */
+      align-items: center;
+      min-height: 100vh;
       text-align: center;
-      font-size: 1.5rem; /* Larger font for direct message */
-      box-sizing: border-box;
-      padding: 1rem; /* A little padding just in case */
+    }
+    .loading-message {
+      font-size: 1.5rem;
+      text-shadow: 0 0 8px #00ff88;
     }
   </style>
 </head>
 <body>
-  Please settle your payment in order to continue using your access.
-</body>
-</html>`, {
-            status: 403,
-            headers: { "Content-Type": "text/html" }
-        });
+  <div class="loading-message">Verifying your access... Please wait.</div>
+
+  <script>
+    // *******************************************************************
+    // *** IMPORTANT SECURITY WARNING:                               ***
+    // *** This IP checking method is client-side (in the browser).    ***
+    // *** It is for DISPLAY PURPOSES ONLY and offers NO REAL SECURITY.***
+    // *** A user can bypass this by disabling JavaScript, spoofing IP,***
+    // *** or directly accessing the target HTML files.                ***
+    // *** For true security, you MUST use a server-side solution.     ***
+    // *******************************************************************
+
+    const allowedIPPrefix = "210.23."; // The IP prefix to whitelist
+    const allowedPage = "index-user16.html"; // The page for whitelisted users
+    const deniedPage = "settle.html";        // The page for non-whitelisted users (payment required)
+
+    async function checkIPAndRedirect() {
+      let clientIP = null;
+      try {
+        // Use a public API to get the user's IP address.
+        // ipify.org is a common, free service. Be mindful of potential rate limits
+        // if your site has extremely high traffic.
+        const response = await fetch('https://api.ipify.org?format=json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        clientIP = data.ip;
+        console.log("Detected IP:", clientIP); // For debugging
+      } catch (error) {
+        console.error("Could not fetch IP address:", error);
+        // If IP fetching fails, default to denying access (more secure than allowing)
+        window.location.href = deniedPage;
+        return;
+      }
+
+      if (clientIP && clientIP.startsWith(allowedIPPrefix)) {
+        console.log("IP is whitelisted. Redirecting to allowed page."); // For debugging
+        window.location.href = allowedPage;
+      } else {
+        console.log("IP is NOT whitelisted. Redirecting to denied page."); // For debugging
+        window.location.href = deniedPage;
+      }
     }
 
-    // Fallback response for unrecognized paths (unlikely to be hit by non-whitelisted IPs due to redirect)
-    return new Response("Not Found", { status: 404 });
-  }
-};
+    // Execute the IP check and redirection when the page loads
+    checkIPAndRedirect();
+  </script>
+</body>
+</html>
