@@ -12,29 +12,52 @@
       color: #FF4500; /* Orange-red for the general message */
       font-family: 'Courier New', monospace;
       display: flex;
-      flex-direction: column; /* Allow content to stack vertically */
-      align-items: center;
-      justify-content: center;
+      flex-direction: column; /* Arrange content vertically */
+      align-items: center; /* Center content horizontally */
+      justify-content: space-between; /* Distribute space between main content and bottom message */
       min-height: 100vh; /* Make sure it takes full screen height */
       text-align: center;
-      font-size: 1.1rem; /* Adjusted to a smaller font size */
+      font-size: 1.1rem; /* General font size */
       box-sizing: border-box;
-      padding: 1rem; /* A little padding around the message */
+      padding: 2rem 1rem; /* Padding top/bottom and sides */
     }
-    p {
-      margin-bottom: 1rem; /* Space between paragraphs */
+
+    /* Styles for the main message block */
+    .main-content {
+      flex-grow: 1; /* Allows this block to take up available space */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* Centers its own content vertically */
+      width: 100%; /* Ensures it takes full width for centering */
     }
-    /* Style for the glitching text */
+
+    .main-content p {
+      margin-bottom: 1rem; /* Space between paragraphs in the main content */
+    }
+
+    /* Styles for the reason message at the bottom */
+    .reason-message-bottom {
+      margin-top: auto; /* Pushes this element to the bottom in a flex column */
+      padding-bottom: 1rem; /* Padding from the very bottom */
+      font-size: 1.1rem; /* Ensure consistent font size or adjust if needed */
+    }
+
+    .reason-label {
+      color: #00FF00; /* Green color for "REASON FOR TERMINATION:" */
+      font-weight: bold;
+    }
+
+    /* Styles for the actual glitching reason text */
     .glitch-text {
       position: relative;
-      color: #FF0000; /* Bright red for the main reason text */
+      color: #FF0000; /* Bright red for the actual reason text */
       font-weight: bold;
       text-shadow: 0 0 0px transparent; /* Initial state, no shadow */
-      margin-top: 0.5rem; /* Space above */
-      margin-bottom: 1.5rem; /* More space below to separate from TOS */
       /* Apply the glitch animation */
       animation: glitch-main 1s infinite alternate linear;
       font-size: 1.2rem; /* Slightly larger for emphasis */
+      display: inline-block; /* To ensure glitch effects apply correctly to text span */
     }
 
     /* Pseudo-elements for the glitch layers */
@@ -106,8 +129,16 @@
   </style>
 </head>
 <body>
-  <p>Your access has been terminated due to unusual activities detected on your device fingerprint.</p>
-  <p class="glitch-text" data-text="REASON FOR TERMINATION: using personal access for booking">REASON FOR TERMINATION: using personal access for booking</p>
-  <p>As per the <a href="tos.html" onclick="alert('This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserves the right to terminate access under such circumstances.</p>
+  <div class="main-content">
+    <p>Your access has been terminated due to unusual activities detected on your device fingerprint.</p>
+    <p>As per the <a href="tos.html" onclick="alert('This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserves the right to terminate access under such circumstances.</p>
+  </div>
+
+  <div class="reason-message-bottom">
+    <p>
+      <span class="reason-label">REASON FOR TERMINATION:</span>
+      <span class="glitch-text" data-text="using personal access for booking">using personal access for booking</span>
+    </p>
+  </div>
 </body>
 </html>
