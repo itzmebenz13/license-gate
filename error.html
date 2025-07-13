@@ -9,7 +9,7 @@
       margin: 0;
       padding: 0;
       background: #000; /* Black background */
-      color: #FF4500; /* Orange-red for the message, stands out */
+      color: #FF4500; /* Orange-red for the general message */
       font-family: 'Courier New', monospace;
       display: flex;
       flex-direction: column; /* Allow content to stack vertically */
@@ -24,13 +24,77 @@
     p {
       margin-bottom: 1rem; /* Space between paragraphs */
     }
-    .highlight-reason { /* New style for the highlighted reason */
-      color: #FFFF00; /* Bright yellow for highlight */
+    /* Style for the glitching text */
+    .glitch-text {
+      position: relative;
+      color: #FF0000; /* Bright red for the main reason text */
       font-weight: bold;
-      text-shadow: 0 0 5px #FFFF00; /* Subtle glow for emphasis */
+      text-shadow: 0 0 0px transparent; /* Initial state, no shadow */
       margin-top: 0.5rem; /* Space above */
       margin-bottom: 1.5rem; /* More space below to separate from TOS */
+      /* Apply the glitch animation */
+      animation: glitch-main 1s infinite alternate linear;
+      font-size: 1.2rem; /* Slightly larger for emphasis */
     }
+
+    /* Pseudo-elements for the glitch layers */
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text); /* Get text from data-text attribute */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      /* These layers will have different colored shadows and clip paths */
+    }
+
+    .glitch-text::before {
+      left: 2px; /* Offset to the right */
+      text-shadow: -2px 0px #00FFFF; /* Cyan shadow shifted left */
+      animation: glitch-layer1 0.7s infinite alternate linear;
+    }
+
+    .glitch-text::after {
+      left: -2px; /* Offset to the left */
+      text-shadow: 2px 0px #FF00FF; /* Magenta shadow shifted right */
+      animation: glitch-layer2 0.8s infinite alternate linear;
+    }
+
+    /* Keyframes for the main text jitter */
+    @keyframes glitch-main {
+      0% { transform: translate(0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(1px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
+    }
+
+    /* Keyframes for the first glitch layer (cyan) */
+    @keyframes glitch-layer1 {
+      0% { clip: rect(0px, 9999px, 10px, 0px); }
+      15% { clip: rect(30px, 9999px, 40px, 0px); }
+      30% { clip: rect(60px, 9999px, 70px, 0px); }
+      45% { clip: rect(10px, 9999px, 20px, 0px); }
+      60% { clip: rect(70px, 9999px, 80px, 0px); }
+      75% { clip: rect(40px, 9999px, 50px, 0px); }
+      90% { clip: rect(90px, 9999px, 100px, 0px); }
+      100% { clip: rect(0px, 9999px, 10px, 0px); }
+    }
+
+    /* Keyframes for the second glitch layer (magenta) */
+    @keyframes glitch-layer2 {
+      0% { clip: rect(80px, 9999px, 90px, 0px); }
+      15% { clip: rect(50px, 9999px, 60px, 0px); }
+      30% { clip: rect(20px, 9999px, 30px, 0px); }
+      45% { clip: rect(90px, 9999px, 100px, 0px); }
+      60% { clip: rect(30px, 9999px, 40px, 0px); }
+      75% { clip: rect(0px, 9999px, 10px, 0px); }
+      90% { clip: rect(60px, 9999px, 70px, 0px); }
+      100% { clip: rect(80px, 9999px, 90px, 0px); }
+    }
+
     a {
       color: #00ff88; /* A contrasting color for the link */
       text-decoration: underline;
@@ -43,7 +107,7 @@
 </head>
 <body>
   <p>Your access has been terminated due to unusual activities detected on your device fingerprint.</p>
-  <p class="highlight-reason">REASON OF TERMINATION: using personal access for booking</p>
-  <p>As per the <a href="tos.html" onclick="alert('This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserve the right to terminate access under such circumstances.</p>
+  <p class="glitch-text" data-text="REASON FOR TERMINATION: using personal access for booking">REASON FOR TERMINATION: using personal access for booking</p>
+  <p>As per the <a href="tos.html" onclick="alert('This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserves the right to terminate access under such circumstances.</p>
 </body>
 </html>
