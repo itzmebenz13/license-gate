@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access Terminated</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000; /* Black background */
+      color: #FF4500; /* Orange-red for the message, stands out */
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column; /* Allow content to stack vertically */
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh; /* Make sure it takes full screen height */
+      text-align: center;
+      font-size: 1.1rem; /* Adjusted to a smaller font size */
+      box-sizing: border-box;
+      padding: 1rem; /* A little padding around the message */
+    }
+    p {
+      margin-bottom: 1rem; /* Space between paragraphs */
+    }
+    a {
+      color: #00ff88; /* A contrasting color for the link */
+      text-decoration: underline;
+      cursor: pointer; /* Indicate it's clickable */
+    }
+    a:hover {
+      color: #00cc66; /* Slightly darker green on hover */
+    }
+  </style>
+</head>
+<body>
+  <p>Your access has been terminated due to unusual activities detected on your account.</p>
+  <p>As per the <a href="javascript:void(0);" onclick="alert('This is a placeholder link. In a real scenario, this would lead to your Terms of Service page.');">Terms of Service</a> you agreed to, we reserve the right to terminate access under such circumstances.</p>
+</body>
+</html>
