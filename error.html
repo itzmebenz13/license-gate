@@ -35,7 +35,7 @@
     /* Styles for the actual glitching reason text */
     .glitch-text {
       position: relative;
-      color: #FF0000; /* Bright red for the actual reason text */
+      color: #FFFF00; /* Bright yellow for the actual reason text */
       font-weight: bold;
       text-shadow: 0 0 0px transparent; /* Initial state, no shadow */
       /* Apply the glitch animation - plays once and stays on last frame */
@@ -58,13 +58,13 @@
 
     .glitch-text::before {
       left: 2px; /* Offset to the right */
-      text-shadow: -2px 0px #00FFFF; /* Cyan shadow shifted left */
+      text-shadow: -2px 0px #FFA500; /* Orange shadow shifted left */
       animation: glitch-layer1 0.7s forwards linear; /* Plays once */
     }
 
     .glitch-text::after {
       left: -2px; /* Offset to the left */
-      text-shadow: 2px 0px #FF00FF; /* Magenta shadow shifted right */
+      text-shadow: 2px 0px #00FFFF; /* Cyan shadow shifted right */
       animation: glitch-layer2 0.8s forwards linear; /* Plays once */
     }
 
@@ -78,7 +78,7 @@
       100% { transform: translate(0); } /* Ends at original position */
     }
 
-    /* Keyframes for the first glitch layer (cyan) */
+    /* Keyframes for the first glitch layer (orange) */
     @keyframes glitch-layer1 {
       0% { clip: rect(0px, 9999px, 10px, 0px); }
       15% { clip: rect(30px, 9999px, 40px, 0px); }
@@ -90,7 +90,7 @@
       100% { clip: rect(0px, 9999px, 10px, 0px); } /* Ends at a final clipped state */
     }
 
-    /* Keyframes for the second glitch layer (magenta) */
+    /* Keyframes for the second glitch layer (cyan) */
     @keyframes glitch-layer2 {
       0% { clip: rect(80px, 9999px, 90px, 0px); }
       15% { clip: rect(50px, 9999px, 60px, 0px); }
