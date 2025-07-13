@@ -24,6 +24,13 @@
     p {
       margin-bottom: 1rem; /* Space between paragraphs */
     }
+    .highlight-reason { /* New style for the highlighted reason */
+      color: #FFFF00; /* Bright yellow for highlight */
+      font-weight: bold;
+      text-shadow: 0 0 5px #FFFF00; /* Subtle glow for emphasis */
+      margin-top: 0.5rem; /* Space above */
+      margin-bottom: 1.5rem; /* More space below to separate from TOS */
+    }
     a {
       color: #00ff88; /* A contrasting color for the link */
       text-decoration: underline;
@@ -36,6 +43,7 @@
 </head>
 <body>
   <p>Your access has been terminated due to unusual activities detected on your device fingerprint.</p>
-  <p>As per the <a href="tos.html" onclick="alert'This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserve the right to terminate access under such circumstances and your access cannot be restored.</p>
+  <p class="highlight-reason">REASON OF TERMINATION: using personal access for booking</p>
+  <p>As per the <a href="tos.html" onclick="alert('This link will redirect you to our Terms of Service.');">Terms of Service</a> you agreed to, the system reserve the right to terminate access under such circumstances.</p>
 </body>
 </html>
