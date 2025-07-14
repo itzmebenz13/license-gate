@@ -10,7 +10,7 @@
       padding: 0;
       background-color: #000;
       font-family: 'Courier New', monospace;
-      overflow: hidden;
+      overflow-x: hidden; /* Prevent horizontal scroll */
       color: #00ff88;
     }
 
@@ -20,6 +20,17 @@
       left: 0;
       z-index: 0;
       opacity: 0.5;
+    }
+
+    .upgrade-reminder {
+      background-color: #00ff88;
+      color: #000;
+      text-align: center;
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      z-index: 3;
+      position: relative;
     }
 
     .navbar {
@@ -80,11 +91,12 @@
       .nav-items.show { display: flex; }
       .nav-item { width: 100%; text-align: center; }
     }
-        .container {
+    
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 64px);
+      min-height: calc(100vh - 120px); /* Adjusted for nav and reminder */
       padding: 20px;
       z-index: 2;
       position: relative;
@@ -212,6 +224,10 @@
 <body>
   <canvas id="matrix"></canvas>
 
+  <div class="upgrade-reminder">
+    NOTICE: Your access has been successfully upgraded from Personal to Booker.
+  </div>
+
   <div class="navbar">
     <span style="color: #00ff88; font-weight: bold;">SHEIN</span>
     <button class="nav-toggle" onclick="toggleMenu()">☰</button>
@@ -230,6 +246,7 @@
       <div class="logo">SHEIN | QR Ownership</div>
       <h2>Verified Purchaser Details:</h2>
       <p><strong>Name:</strong> (hidden, encrypted)</p>
+      <p><strong>Access Type:</strong> BOOKER</p>
       <p><strong>RA Facebook Link:</strong> (hidden, encrypted)</p>
       <div class="receipt">Purchase # Receipt: <strong>calix-00016</strong></div>
       <div class="terms">
@@ -313,6 +330,10 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      // Recalculate columns on resize
+      const newColumns = canvas.width / 20;
+      drops.length = Math.floor(newColumns);
+      drops.fill(1);
     });
   </script>
 </body>
