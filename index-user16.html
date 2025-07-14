@@ -26,11 +26,29 @@
       background-color: #00ff88;
       color: #000;
       text-align: center;
-      padding: 8px 15px;
+      padding: 10px 15px;
       font-size: 0.9rem;
       font-weight: bold;
       z-index: 3;
       position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .upgrade-reminder-text {
+      flex-grow: 1;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      color: #000;
+      font-size: 1.5rem; /* Made the 'x' slightly larger */
+      cursor: pointer;
+      padding: 0 5px; /* Added some padding for easier clicking */
+      line-height: 1;
+      margin-left: 15px;
     }
 
     .navbar {
@@ -224,8 +242,11 @@
 <body>
   <canvas id="matrix"></canvas>
 
-  <div class="upgrade-reminder">
-    NOTICE: Your access has been successfully upgraded from <b>PERSONAL</b> to <b>BOOKER</b>.
+  <div class="upgrade-reminder" id="reminderBar">
+    <span class="upgrade-reminder-text">
+      NOTICE: Your access has been successfully upgraded from <b>PERSONAL</b> to <b>BOOKER</b>.
+    </span>
+    <button class="close-button" onclick="closeReminder()">×</button>
   </div>
 
   <div class="navbar">
@@ -267,6 +288,10 @@
     </div>
   </div>
     <script>
+    function closeReminder() {
+      document.getElementById('reminderBar').style.display = 'none';
+    }
+
     function confirmAction() {
       if (document.getElementById('termsCheckbox').checked) {
         window.location.href = "https://itzmebenz13.github.io/final-gate/index-user16.html";
@@ -312,17 +337,18 @@
       ctx.fillStyle = "#00ff88";
       ctx.font = "16px monospace";
 
-      drops.forEach((y, i) => {
+      for (let i = 0; i < drops.length; i++) {
         const text = characters.charAt(Math.floor(Math.random() * characters.length));
         const x = i * 20;
-        ctx.fillText(text, x, y * 20);
+        const y = drops[i] * 20;
+        ctx.fillText(text, x, y);
 
-        if (y * 20 > canvas.height && Math.random() > 0.975) {
+        if (y > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
 
         drops[i]++;
-      });
+      }
     }
 
     setInterval(drawMatrix, 33);
@@ -330,7 +356,7 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      // Recalculate columns on resize
+      
       const newColumns = canvas.width / 20;
       drops.length = Math.floor(newColumns);
       drops.fill(1);
