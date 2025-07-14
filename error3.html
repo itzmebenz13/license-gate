@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Access Suspended</title>
+  <title>Access Terminated</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      background: #000; /* Black background */
-      color: #FF4500; /* Orange-red for the message */
+      background: #000;
+      color: #E50000; /* Bright Red for the message */
       font-family: 'Courier New', monospace;
       display: flex;
       flex-direction: column;
@@ -23,53 +23,111 @@
     }
 
     .container {
-      border: 1px solid #FF4500;
+      border: 2px solid #E50000;
       padding: 2rem 3rem;
       max-width: 800px;
-      box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+      box-shadow: 0 0 25px rgba(229, 0, 0, 0.5);
+      background-color: #1a0000;
     }
 
-    h1 {
-      color: #FFFF00; /* Bright yellow for the title */
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
+    .glitch-title {
+      position: relative;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      color: #fff;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      animation: glitch-main 1.5s infinite linear;
+    }
+
+    /* Glitch effect pseudo-elements */
+    .glitch-title::before,
+    .glitch-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #1a0000;
+      overflow: hidden;
+    }
+
+    .glitch-title::before {
+      left: 2px;
+      text-shadow: -2px 0 #00ffff; /* Cyan */
+      animation: glitch-layer1 1s infinite linear reverse;
+    }
+
+    .glitch-title::after {
+      left: -2px;
+      text-shadow: -2px 0 #ff00ff; /* Magenta */
+      animation: glitch-layer2 1.2s infinite linear reverse;
     }
 
     p {
-      margin: 1rem 0;
-      line-height: 1.6;
+      margin: 1.2rem 0;
+      line-height: 1.7;
     }
 
-    .highlight {
-      color: #FFFFFF; /* White to highlight the time frame */
+    a {
+      color: #00ffff; /* Cyan for link */
+      text-decoration: underline;
+    }
+    
+    a:hover {
+      color: #fff;
+    }
+
+    .final-statement {
       font-weight: bold;
+      color: #fff;
+      margin-top: 2rem;
     }
 
-    .footer-note {
-      font-size: 0.9rem;
-      color: #888; /* Dim color for the footer note */
-      margin-top: 2rem;
+    /* Keyframes for the glitch effect */
+    @keyframes glitch-main {
+      0% { transform: skewX(0deg); }
+      5% { transform: skewX(2deg); }
+      10% { transform: skewX(-2deg); }
+      15% { transform: skewX(0deg); }
+      100% { transform: skewX(0deg); }
+    }
+
+    @keyframes glitch-layer1 {
+      0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); }
+      10% { clip-path: polygon(0 45%, 100% 45%, 100% 50%, 0 50%); }
+      40% { clip-path: polygon(0 80%, 100% 80%, 100% 85%, 0 85%); }
+      60% { clip-path: polygon(0 30%, 100% 30%, 100% 35%, 0 35%); }
+      90% { clip-path: polygon(0 60%, 100% 60%, 100% 65%, 0 65%); }
+      100% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); }
+    }
+
+    @keyframes glitch-layer2 {
+      0% { clip-path: polygon(0 70%, 100% 70%, 100% 75%, 0 75%); }
+      20% { clip-path: polygon(0 15%, 100% 15%, 100% 20%, 0 20%); }
+      50% { clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%); }
+      70% { clip-path: polygon(0 40%, 100% 40%, 100% 45%, 0 45%); }
+      80% { clip-path: polygon(0 5%, 100% 5%, 100% 10%, 0 10%); }
+      100% { clip-path: polygon(0 70%, 100% 70%, 100% 75%, 0 75%); }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>ACCESS UNDER REVIEW</h1>
+    <h1 class="glitch-title" data-text="ACCESS TERMINATED">ACCESS TERMINATED</h1>
     
     <p>
-      Your access has been temporarily suspended due to detected irregularities. The access admin is now conducting an investigation into your access activity.
+      Following a manual review, it has been determined that you have violated the <a href="tos.html" target="_blank">Terms of Use</a>.
     </p>
     
     <p>
-      This review process is expected to take between <span class="highlight">3-5 hours</span>. You will not receive a notification regarding the outcome; please return after this period to check if your access has been restored or permanently terminated.
+      Consequently, your access is permanently suspended. This action is irreversible and your access cannot be recovered, restored, or upgraded. Furthermore, you are banned from availing again.
     </p>
-  </div>
 
-  <div class="footer-note">
-    [SYSTEM TIMESTAMP: 2025-07-14 10:24:16 PST]
+    <p class="final-statement">This decision is final.</p>
   </div>
 
 </body>
