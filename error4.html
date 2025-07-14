@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Unavailable</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #FFD700; /* Gold/Yellow for a non-critical alert */
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      font-size: 1.1rem;
+      box-sizing: border-box;
+      padding: 1rem;
+    }
+
+    .container {
+      border: 1px solid #FFD700;
+      padding: 2rem 3rem;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    p {
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 2rem;
+      animation: blink 1.5s infinite;
+    }
+
+    /* Blinking animation for the footer */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>SERVICE TEMPORARILY OFFLINE</h1>
+    
+    <p>
+      Access is currently unavailable as the administrator is conducting a system-wide security check and investigation involving all <strong>PERSONAL ACCESS</strong> QR codes.
+    </p>
+    
+    <p>
+      We appreciate your patience. Please try again later.
+    </p>
+  </div>
+
+  <div class="footer-note">
+    [STATUS: ADMINISTRATIVE REVIEW IN PROGRESS]
+  </div>
+
+</body>
+</html>
