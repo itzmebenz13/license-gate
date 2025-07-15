@@ -10,7 +10,7 @@
       padding: 0;
       background-color: #000;
       font-family: 'Courier New', monospace;
-      overflow: hidden;
+      overflow-x: hidden; /* Prevent horizontal scroll */
       color: #00ff88;
     }
 
@@ -20,6 +20,35 @@
       left: 0;
       z-index: 0;
       opacity: 0.5;
+    }
+
+    .upgrade-reminder {
+      background-color: #00ff88;
+      color: #000;
+      text-align: center;
+      padding: 10px 15px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      z-index: 3;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .upgrade-reminder-text {
+      flex-grow: 1;
+    }
+
+    .close-button {
+      background: none;
+      border: none;
+      color: #000;
+      font-size: 1.5rem; /* Made the 'x' slightly larger */
+      cursor: pointer;
+      padding: 0 5px; /* Added some padding for easier clicking */
+      line-height: 1;
+      margin-left: 15px;
     }
 
     .navbar {
@@ -80,11 +109,12 @@
       .nav-items.show { display: flex; }
       .nav-item { width: 100%; text-align: center; }
     }
-        .container {
+    
+    .container {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 64px);
+      min-height: calc(100vh - 120px); /* Adjusted for nav and reminder */
       padding: 20px;
       z-index: 2;
       position: relative;
@@ -165,10 +195,59 @@
       font-weight: bold;
       padding: 20px;
     }
+    .terms {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+        cursor: pointer; /* Makes the entire label clickable */
+    }
+
+    .terms a {
+        color: #00ff88;
+        text-decoration: underline;
+    }
+
+    /* Hide the default checkbox */
+    .terms input[type="checkbox"] {
+        display: none;
+    }
+    
+    /* Create a custom checkbox */
+    .terms label::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #00ff88;
+        background-color: #000;
+        border-radius: 3px;
+        margin-right: 10px;
+        vertical-align: middle; /* Align with text */
+        transition: background-color 0.3s ease;
+    }
+
+    /* Style for when the checkbox is checked */
+    .terms input[type="checkbox"]:checked + label::before {
+        background-color: #00ff88;
+        content: '✓'; /* Checkmark character */
+        font-size: 14px;
+        color: #000;
+        text-align: center;
+        line-height: 16px; /* Center the checkmark */
+        font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <canvas id="matrix"></canvas>
+
+  <div class="upgrade-reminder" id="reminderBar">
+    <span class="upgrade-reminder-text">
+      NOTICE: Your access has been successfully upgraded from <b>PERSONAL</b> to <b>BOOKER</b>.
+    </span>
+    <button class="close-button" onclick="closeReminder()">×</button>
+  </div>
 
   <div class="navbar">
     <span style="color: #00ff88; font-weight: bold;">SHEIN</span>
@@ -188,9 +267,14 @@
       <div class="logo">SHEIN | QR Ownership</div>
       <h2>Verified Purchaser Details:</h2>
       <p><strong>Name:</strong> ZELINE SOLIS</p>
+      <p><strong>Access Type:</strong> BOOKER</p>
       <p><strong>RA Facebook Link:</strong> (hidden, encrypted)</p>
       <div class="receipt">Purchase # Receipt: <strong>calix-00009</strong></div>
-      <button class="btn" onclick="confirm()">Confirm</button>
+      <div class="terms">
+        <input type="checkbox" id="termsCheckbox">
+        <label for="termsCheckbox">I agree to the <a href="tos.html" target="_blank">Terms and Conditions</a></label>
+      </div>
+      <button class="btn" onclick="confirmAction()">Confirm</button>
       <button class="btn secondary" onclick="checkExpiry()">Check Expiry</button>
     </div>
 
@@ -204,8 +288,16 @@
     </div>
   </div>
     <script>
-    function confirm() {
-      window.location.href = "https://itzmebenz13.github.io/final-gate/index-ir9.html";
+    function closeReminder() {
+      document.getElementById('reminderBar').style.display = 'none';
+    }
+
+    function confirmAction() {
+      if (document.getElementById('termsCheckbox').checked) {
+        window.location.href = "https://itzmebenz13.github.io/final-gate/index-user16.html";
+      } else {
+        alert("Please agree to the TOS before proceeding.");
+      }
     }
 
     function checkExpiry() {
@@ -245,17 +337,18 @@
       ctx.fillStyle = "#00ff88";
       ctx.font = "16px monospace";
 
-      drops.forEach((y, i) => {
+      for (let i = 0; i < drops.length; i++) {
         const text = characters.charAt(Math.floor(Math.random() * characters.length));
         const x = i * 20;
-        ctx.fillText(text, x, y * 20);
+        const y = drops[i] * 20;
+        ctx.fillText(text, x, y);
 
-        if (y * 20 > canvas.height && Math.random() > 0.975) {
+        if (y > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
 
         drops[i]++;
-      });
+      }
     }
 
     setInterval(drawMatrix, 33);
@@ -263,6 +356,10 @@
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      
+      const newColumns = canvas.width / 20;
+      drops.length = Math.floor(newColumns);
+      drops.fill(1);
     });
   </script>
 </body>
