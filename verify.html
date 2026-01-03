@@ -53,37 +53,15 @@ if (!navigator.onLine) showOffline();
 window.addEventListener("offline", showOffline);
 window.addEventListener("online", () => location.reload());
 
-/* ENVIRONMENT CHECK */
-const ua = navigator.userAgent || "";
-const isWebView = /wv|WebView/i.test(ua);
-
-/* BLOCK NORMAL BROWSERS */
-if (!isWebView) {
-  document.body.innerHTML = `
-    <div class="box">
-      <h3>Open in App</h3>
-      <p>This page is not available in browsers.</p>
-    </div>
-  `;
-  throw new Error("Blocked");
-}
-
-/* SERVER REDIRECT */
+/* REDIRECT */
 setTimeout(() => {
-  document.getElementById("status").innerText =
-    "Finalizing secure session…";
+  if (!navigator.onLine) return;
 
-  fetch("/go", { method: "POST" })
-    .then(res => {
-      if (res.redirected) {
-        window.location.href = res.url;
-      }
-    })
-    .catch(() => {
-      document.getElementById("status").innerText =
-        "Unable to continue.";
-    });
-}, 1200);
+  document.getElementById("status").innerText =
+    "Redirecting…";
+
+  window.location.href = "https://example.com";
+}, 1500);
 </script>
 </body>
 </html>
