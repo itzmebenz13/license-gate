@@ -5,20 +5,20 @@
 <title>Verifying…</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- HARD FALLBACK -->
+<meta http-equiv="refresh" content="3;url=https://example.com">
+
 <style>
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  font-family: system-ui, -apple-system;
   background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
-.box {
-  text-align: center;
-  max-width: 300px;
-}
+.box { text-align: center; }
 .loader {
   width: 40px;
   height: 40px;
@@ -28,39 +28,20 @@ body {
   animation: spin 1s linear infinite;
   margin: 20px auto;
 }
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
+@keyframes spin { 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
 <body>
-<div class="box" id="app">
+<div class="box">
   <div class="loader"></div>
   <p id="status">Verifying environment…</p>
 </div>
 
 <script>
-/* OFFLINE MODE */
-function showOffline() {
-  document.getElementById("app").innerHTML = `
-    <h3>No Internet Connection</h3>
-    <p>Please reconnect to continue.</p>
-  `;
-}
-
-if (!navigator.onLine) showOffline();
-window.addEventListener("offline", showOffline);
-window.addEventListener("online", () => location.reload());
-
-/* REDIRECT */
+document.getElementById("status").innerText = "Redirecting…";
 setTimeout(() => {
-  if (!navigator.onLine) return;
-
-  document.getElementById("status").innerText =
-    "Redirecting…";
-
-  window.location.href = "https://example.com";
+  window.location.replace("https://example.com");
 }, 1500);
 </script>
 </body>
