@@ -50,7 +50,7 @@ body {
     ua.includes("shein_ios");
 
   if (!isShein) {
-    status.innerText = "Checking authorization.";
+    status.innerText = "Checking proper authorization...";
     setTimeout(() => {
       window.location.replace("https://google.com");
     }, 1500);
