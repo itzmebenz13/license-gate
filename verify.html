@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Verifying…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.box {
+  text-align: center;
+  max-width: 300px;
+}
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #eee;
+  border-top: 4px solid #ff3f6c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+<div class="box" id="app">
+  <div class="loader"></div>
+  <p id="status">Verifying environment…</p>
+</div>
+
+<script>
+/* OFFLINE MODE */
+function showOffline() {
+  document.getElementById("app").innerHTML = `
+    <h3>No Internet Connection</h3>
+    <p>Please reconnect to continue.</p>
+  `;
+}
+
+if (!navigator.onLine) showOffline();
+window.addEventListener("offline", showOffline);
+window.addEventListener("online", () => location.reload());
+
+/* ENVIRONMENT CHECK */
+const ua = navigator.userAgent || "";
+const isWebView = /wv|WebView/i.test(ua);
+
+/* BLOCK NORMAL BROWSERS */
+if (!isWebView) {
+  document.body.innerHTML = `
+    <div class="box">
+      <h3>Open in App</h3>
+      <p>This page is not available in browsers.</p>
+    </div>
+  `;
+  throw new Error("Blocked");
+}
+
+/* SERVER REDIRECT */
+setTimeout(() => {
+  document.getElementById("status").innerText =
+    "Finalizing secure session…";
+
+  fetch("/go", { method: "POST" })
+    .then(res => {
+      if (res.redirected) {
+        window.location.href = res.url;
+      }
+    })
+    .catch(() => {
+      document.getElementById("status").innerText =
+        "Unable to continue.";
+    });
+}, 1200);
+</script>
+</body>
+</html>
