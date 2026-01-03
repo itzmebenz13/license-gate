@@ -5,7 +5,7 @@
 <title>Verifying…</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- HARD FALLBACK -->
+<!-- Fallback if JS is disabled -->
 <meta http-equiv="refresh" content="3;url=https://example.com">
 
 <style>
@@ -39,10 +39,32 @@ body {
 </div>
 
 <script>
-document.getElementById("status").innerText = "Checking device fingerprint...";
-setTimeout(() => {
-  window.location.replace("https://api-shein.shein.com/ark/3210?type=immersive&version_bid=101682411%2C101507551%2C100710741%2C101545096%2C101682511&siteuid=andshph&test=5061&ad_type=DPA&activity=newuserprice&goods_id=197600076&coloration=1&language=en&link_device_level=1&type=immersive&crowd_id=1&version_eid=100647471&scene=1&tv_b=2&pf=facebook&requestId=app-3477424e-ab65-4ddf-9684-0e4d5b0d21c7&arkId=3210&landing_page_id=3210&ad_test_id=44950&key_is_outside_link=true&ugid=040iloj0xw&url_from=adhub195767277&target_url=https%3A%2F%2Fph.shein.com%2Fark%2Fdefault%3Fscene%3D1%26test%3D5051%26ad_type%3DDPA%26goods_id%3D94189898%26fbclid%3DIwZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMzUwNjg1NTMxNzI4AAEe-grWfqusbGCj2MmAKfxmxJlZAvxFEQxTXcDNg_5Z_FSK7FqAIM5Z6huE3EY_aem_FtWo8MF_QZxzMH28uLPDhw&app=shein&device_type=android&site_uid=andshph&region=PH");
-}, 1500);
+(function () {
+  const status = document.getElementById("status");
+  const ua = navigator.userAgent.toLowerCase();
+
+  // SHEIN app indicators
+  const isShein =
+    ua.includes("shein") ||
+    ua.includes("shein_android") ||
+    ua.includes("shein_ios");
+
+  if (!isShein) {
+    status.innerText = "Please open this link in the SHEIN app.";
+    setTimeout(() => {
+      window.location.replace("https://example.com");
+    }, 1500);
+    return;
+  }
+
+  status.innerText = "Checking device fingerprint…";
+
+  setTimeout(() => {
+    window.location.replace(
+      "https://api-shein.shein.com/ark/3210?type=immersive&version_bid=101682411%2C101507551%2C100710741%2C101545096%2C101682511&siteuid=andshph&test=5061&ad_type=DPA&activity=newuserprice&goods_id=197600076&coloration=1&language=en&link_device_level=1&type=immersive&crowd_id=1&version_eid=100647471&scene=1&tv_b=2&pf=facebook&requestId=app-3477424e-ab65-4ddf-9684-0e4d5b0d21c7&arkId=3210&landing_page_id=3210&ad_test_id=44950&key_is_outside_link=true&ugid=040iloj0xw&url_from=adhub195767277&target_url=https%3A%2F%2Fph.shein.com%2Fark%2Fdefault%3Fscene%3D1%26test%3D5051%26ad_type%3DDPA%26goods_id%3D94189898&app=shein"
+    );
+  }, 1500);
+})();
 </script>
 </body>
 </html>
