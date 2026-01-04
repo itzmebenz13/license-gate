@@ -1,8 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ERROR</title>
+<meta charset="UTF-8">
+<title>Verifying…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-ERROR!
+<!-- Fallback if JS is disabled -->
+<meta http-equiv="refresh" content="3;url=https://example.com">
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.box { text-align: center; }
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #eee;
+  border-top: 4px solid #ff3f6c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</head>
+
+<body>
+<div class="box">
+  <div class="loader"></div>
+  <p id="status">Verifying environment…</p>
+</div>
+
+<script>
+(function () {
+  const status = document.getElementById("status");
+  const ua = navigator.userAgent.toLowerCase();
+
+  // SHEIN app indicators
+  const isShein =
+    ua.includes("shein") ||
+    ua.includes("shein_android") ||
+    ua.includes("shein_ios");
+
+  if (!isShein) {
+    status.innerText = "Checking proper authorization...";
+    setTimeout(() => {
+      window.location.replace("https://google.com");
+    }, 1500);
+    return;
+  }
+
+  status.innerText = "Checking proper authorization...";
+
+  setTimeout(() => {
+    window.location.replace(
+      "https://api-shein.shein.com/ark/3210?type=immersive&version_bid=101682411%2C101507551%2C100710741%2C101545096%2C101682511&siteuid=andshph&test=5061&ad_type=DPA&activity=newuserprice&goods_id=197600076&coloration=1&language=en&link_device_level=1&type=immersive&crowd_id=1&version_eid=100647471&scene=1&tv_b=2&pf=facebook&requestId=app-3477424e-ab65-4ddf-9684-0e4d5b0d21c7&arkId=3210&landing_page_id=3210&ad_test_id=44950&key_is_outside_link=true&ugid=040iloj0xw&url_from=adhub195767277&target_url=https%3A%2F%2Fph.shein.com%2Fark%2Fdefault%3Fscene%3D1%26test%3D5051%26ad_type%3DDPA%26goods_id%3D94189898&app=shein"
+    );
+  }, 1500);
+})();
+</script>
+</body>
+</html>
