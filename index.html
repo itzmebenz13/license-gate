@@ -2,69 +2,188 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Verifying…</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Loading...</title>
 
-<!-- Fallback if JS is disabled -->
-<meta http-equiv="refresh" content="3;url=https://example.com">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 
 <style>
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system;
-  background: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.box { text-align: center; }
-.loader {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #eee;
-  border-top: 4px solid #ff3f6c;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none;
+  }
+
+  /* Secure Container */
+  .security-box {
+    text-align: center;
+    padding: 20px;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Shein-style Loader */
+  .loader {
+    width: 45px;
+    height: 45px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #000; /* Minimalist Black */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 20px auto;
+  }
+
+  .status-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* Fake Error Screen (Hidden by default) */
+  #fake-error {
+    display: none;
+    text-align: center;
+  }
+  .error-icon { font-size: 40px; margin-bottom: 10px; }
+  .error-title { font-weight: bold; font-size: 18px; color: #333; }
+  .error-desc { font-size: 13px; color: #888; margin-top: 5px; }
+
+  @keyframes spin { 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
-<body>
-<div class="box">
-  <div class="loader"></div>
-  <p id="status">Verifying environment…</p>
-</div>
+<body oncontextmenu="return false;"> <div class="security-box" id="main-view">
+    <div class="loader"></div>
+    <p class="status-text" id="status">Secure Verifying...</p>
+  </div>
+
+  <div id="fake-error">
+    <div class="error-icon">⚠️</div>
+    <div class="error-title">Connection Interrupted</div>
+    <div class="error-desc">Please check your network settings.</div>
+    <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:#000; color:#fff; border:none; border-radius:4px;">Retry</button>
+  </div>
 
 <script>
 (function () {
+  // --- CONFIGURATION ---
+  // The Target URL is hidden here in Base64 to prevent "View Source" leaks.
+  // I encoded your Shein URL below.
+  const ENCRYPTED_TARGET = "aHR0cHM6Ly9hcGktc2hlaW4uc2hlaW4uY29tL2Fyay8zMjEwP3R5cGU9aW1tZXJzaXZlJnZlcnNpb25fYmlkPTEwMTY4MjQxMSUyQzEwMTUwNzU1MSUyQzEwMDcxMDc0MSUyQzEwMTU0NTA5NiUyQzEwMTY4MjUxMSZzaXRldWlkPWFuZHNocGgmdGVzdD01MDYxJmFkX3R5cGU9RFBBJmFjdGl2aXR5PW5ld3VzZXJwcmljZSZnb29kc19pZD0xOTc2MDAwNzYmY29sb3JhdGlvbj0xJmxhbmd1YWdlPWVuJmxpbmtfZGV2aWNlX2xldmVsPTEmdHlwZT1pbW1lcnNpdmUmY3Jvd2RfaWQ9MSZ2ZXJzaW9uX2VpZD0xMDA2NDc0NzEmc2NlbmU9MSZ0dl9iPTImcGY9ZmFjZWJvb2smcmVxdWVzdElkPWFwcC0zNDc3NDI0ZS1hYjY1LTRkZGYtOTY4NC0wZTRkNWIwZDIxYzcmYXJrSWQ9MzIxMCZsYW5kaW5nX3BhZ2VfaWQ9MzIxMCZhZF90ZXN0X2lkPTQ0OTUwJmtleV9pc19vdXRzaWRlX2xpbms9dHJ1ZSZ1Z2lkPTA0MGlbG9qMHh3JnVybF9mcm9tPWFkaHViMTk1NzY3Mjc3JnRhcmdldF91cmw9aHR0cHMlM0ElMkYlMkZwaC5zaGVpbi5jb20lMkZhcmslMkZkZWZhdWx0JTNGc2NlbmUlM0QxJTI2dGVzdCUzRDUwNTElMjZhZF90eXBlJTNERFBBJTI2Z29vZHNfaWQlM0Q5NDE4OTg5OCZhcHA9c2hlaW4=";
+
+  const FALLBACK_URL = "https://www.google.com"; // Where to send non-Shein users
+  
+  // --- SECURITY VARIABLES ---
+  let redirectTimer = null;
   const status = document.getElementById("status");
-  const ua = navigator.userAgent.toLowerCase();
+  const mainView = document.getElementById("main-view");
+  const errorView = document.getElementById("fake-error");
 
-  // SHEIN app indicators
-  const isShein =
-    ua.includes("shein") ||
-    ua.includes("shein_android") ||
-    ua.includes("shein_ios");
+  // --- 1. ANTI-DEBUGGER (Optional) ---
+  // Makes it annoying to open Developer Tools
+  setInterval(() => {
+    // const start = new Date();
+    // debugger; // Uncomment this line to freeze execution if DevTools is open
+  }, 1000);
 
-  if (!isShein) {
-    status.innerText = "Checking proper authorization...";
-    setTimeout(() => {
-      window.location.replace("https://google.com");
-    }, 1500);
-    return;
+  // --- 2. NETWORK KILL SWITCH (Crucial for Spoofing Prevention) ---
+  // If the user turns off WiFi while waiting, this fires immediately.
+  function handleOffline() {
+    // KILL the timer immediately so the redirect NEVER happens.
+    if (redirectTimer) clearTimeout(redirectTimer);
+    
+    // HIDE the loader so they don't think it's still working.
+    mainView.style.display = "none";
+    
+    // SHOW the fake error. This prevents the browser from showing the real URL error.
+    errorView.style.display = "block";
+    
+    // UPDATE text just in case
+    document.title = "Connection Error";
   }
 
-  status.innerText = "Checking proper authorization...";
+  // Listen for network changes in real-time
+  window.addEventListener('offline', handleOffline);
 
-  setTimeout(() => {
-    window.location.replace(
-      "https://api-shein.shein.com/ark/3210?type=immersive&version_bid=101682411%2C101507551%2C100710741%2C101545096%2C101682511&siteuid=andshph&test=5061&ad_type=DPA&activity=newuserprice&goods_id=197600076&coloration=1&language=en&link_device_level=1&type=immersive&crowd_id=1&version_eid=100647471&scene=1&tv_b=2&pf=facebook&requestId=app-3477424e-ab65-4ddf-9684-0e4d5b0d21c7&arkId=3210&landing_page_id=3210&ad_test_id=44950&key_is_outside_link=true&ugid=040iloj0xw&url_from=adhub195767277&target_url=https%3A%2F%2Fph.shein.com%2Fark%2Fdefault%3Fscene%3D1%26test%3D5051%26ad_type%3DDPA%26goods_id%3D94189898&app=shein"
-    );
-  }, 1500);
+  // --- 3. ENVIRONMENT CHECK ---
+  function init() {
+    const ua = navigator.userAgent.toLowerCase();
+    
+    // Check if we are truly online before starting
+    if (!navigator.onLine) {
+      handleOffline();
+      return;
+    }
+
+    const isShein = ua.includes("shein") || ua.includes("shein_android") || ua.includes("shein_ios");
+
+    if (!isShein) {
+      status.innerText = "Redirecting...";
+      setTimeout(() => { window.location.replace(FALLBACK_URL); }, 1000);
+      return;
+    }
+
+    // Shein Detected - Start the Timer
+    status.innerText = "Authenticating...";
+    
+    // Store the timer ID so we can cancel it if they pull the plug
+    redirectTimer = setTimeout(() => {
+      performSafeRedirect();
+    }, 1200); // Slightly shorter delay
+  }
+
+  // --- 4. PRE-FLIGHT PING (The "Safety Check") ---
+  // Before we actually command the browser to change URLs, we check the network one last time.
+  function performSafeRedirect() {
+    // Double check: Are we still online?
+    if (!navigator.onLine) {
+      handleOffline();
+      return;
+    }
+
+    // Decode the URL at the last second
+    const realUrl = atob(ENCRYPTED_TARGET);
+
+    // TRICK: Try to load a tiny image. If this fails immediately, we know the net is gone.
+    // This prevents the "browser error page" which leaks the link.
+    const img = new Image();
+    
+    img.onerror = function() {
+      // If image fails to load, assume network is unstable/spoofed -> ABORT
+      handleOffline();
+    };
+
+    img.onload = function() {
+      // Image loaded -> Internet is real -> GO.
+      window.location.replace(realUrl);
+    };
+
+    // Trigger the check (using a tiny favicon or pixel to verify connectivity)
+    // We add a random timestamp to prevent caching
+    img.src = "https://www.google.com/favicon.ico?t=" + new Date().getTime();
+    
+    // Fallback: If the image takes too long (slow net), just try redirecting anyway 
+    // but only if navigator.onLine is still true.
+    setTimeout(() => {
+        if(navigator.onLine) window.location.replace(realUrl);
+    }, 1000);
+  }
+
+  // Start
+  init();
+
 })();
 </script>
 </body>
 </html>
+
