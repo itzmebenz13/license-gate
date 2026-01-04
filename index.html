@@ -2,113 +2,72 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Verifying...</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Verifying…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+<!-- Fallback if JS is disabled -->
+<meta http-equiv="refresh" content="3;url=https://example.com">
 
 <style>
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system;
   background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  user-select: none; /* Prevent copying text */
 }
 .box { text-align: center; }
-
-/* The Loader */
 .loader {
   width: 40px;
   height: 40px;
   border: 4px solid #eee;
-  border-top: 4px solid #000; /* Black for Shein vibe */
+  border-top: 4px solid #ff3f6c;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 1s linear infinite;
   margin: 20px auto;
 }
-
-/* Hidden Error Message */
-#offline-error {
-  display: none;
-  color: #000;
-}
-.error-icon { font-size: 40px; margin-bottom: 10px; }
-.error-text { font-weight: bold; font-size: 16px; }
-
 @keyframes spin { 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
-<body oncontextmenu="return false;">
-
-<div class="box" id="loading-box">
+<body>
+<div class="box">
   <div class="loader"></div>
-  <p id="status">Verifying environment...</p>
-</div>
-
-<div id="offline-error" class="box">
-  <div class="error-icon">📶</div>
-  <p class="error-text">Connection Lost</p>
-  <p style="font-size:12px; color:#666;">Internet is required to verify this session.</p>
-  <button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; background:#000; color:#fff; border:none; border-radius:4px; font-weight:bold;">RETRY</button>
+  <p id="status">Verifying environment…</p>
 </div>
 
 <script>
 (function () {
-  // --- CONFIGURATION ---
-  // Target Link is Base64 encoded so it is NOT visible in "View Source"
-  const ENCRYPTED_LINK = "aHR0cHM6Ly9hcGktc2hlaW4uc2hlaW4uY29tL2Fyay8zMjEwP3R5cGU9aW1tZXJzaXZlJnZlcnNpb25fYmlkPTEwMTY4MjQxMSUyQzEwMTUwNzU1MSUyQzEwMDcxMDc0MSUyQzEwMTU0NTA5NiUyQzEwMTY4MjUxMSZzaXRldWlkPWFuZHNocGgmdGVzdD01MDYxJmFkX3R5cGU9RFBBJmFjdGl2aXR5PW5ld3VzZXJwcmljZSZnb29kc19pZD0xOTc2MDAwNzYmY29sb3JhdGlvbj0xJmxhbmd1YWdlPWVuJmxpbmtfZGV2aWNlX2xldmVsPTEmdHlwZT1pbW1lcnNpdmUmY3Jvd2RfaWQ9MSZ2ZXJzaW9uX2VpZD0xMDA2NDc0NzEmc2NlbmU9MSZ0dl9iPTImcGY9ZmFjZWJvb2smcmVxdWVzdElkPWFwcC0zNDc3NDI0ZS1hYjY1LTRkZGYtOTY4NC0wZTRkNWIwZDIxYzcmYXJrSWQ9MzIxMCZsYW5kaW5nX3BhZ2VfaWQ9MzIxMCZhZF90ZXN0X2lkPTQ0OTUwJmtleV9pc19vdXRzaWRlX2xpbms9dHJ1ZSZ1Z2lkPTA0MGlbG9qMHh3JnVybF9mcm9tPWFkaHViMTk1NzY3Mjc3JnRhcmdldF91cmw9aHR0cHMlM0ElMkYlMkZwaC5zaGVpbi5jb20lMkZhcmslMkZkZWZhdWx0JTNGc2NlbmUlM0QxJTI2dGVzdCUzRDUwNTElMjZhZF90eXBlJTNERFBBJTI2Z29vZHNfaWQlM0Q5NDE4OTg5OCZhcHA9c2hlaW4=";
-  
-  const FALLBACK_URL = "https://www.google.com";
-
-  // --- VARIABLES ---
   const status = document.getElementById("status");
-  const loadingBox = document.getElementById("loading-box");
-  const errorBox = document.getElementById("offline-error");
-  let redirectTimer = null;
+  const ua = navigator.userAgent.toLowerCase();
 
-  // --- SECURITY: NETWORK KILL SWITCH ---
-  // This function runs instantly if the browser detects offline mode
-  function triggerKillSwitch() {
-    // 1. Stop the redirect timer (Prevent the browser from going to the link)
-    if (redirectTimer) clearTimeout(redirectTimer);
-    
-    // 2. Hide the loading screen
-    loadingBox.style.display = "none";
-    
-    // 3. Show the fake error (Hides the real URL from the browser UI)
-    errorBox.style.display = "block";
-    document.title = "Connection Error";
+  // SHEIN app indicators
+  const isShein =
+    ua.includes("shein") ||
+    ua.includes("shein_android") ||
+    ua.includes("shein_ios");
+
+  if (!isShein) {
+    status.innerText = "Checking proper authorization...";
+    setTimeout(() => {
+      window.location.replace("https://google.com");
+    }, 1500);
+    return;
   }
 
-  // Listen for the "offline" event (e.g., turning off WiFi in control center)
-  window.addEventListener("offline", triggerKillSwitch);
+  status.innerText = "Checking proper authorization...";
 
-  // --- MAIN LOGIC ---
-  function init() {
-    // 1. Immediate Check
-    if (!navigator.onLine) {
-      triggerKillSwitch();
-      return;
-    }
-
-    const ua = navigator.userAgent.toLowerCase();
-    const isShein = ua.includes("shein") || ua.includes("shein_android") || ua.includes("shein_ios");
-
-    // 2. Browser Check (Not Shein? Go to Google)
-    if (!isShein) {
-      status.innerText = "Redirecting...";
-      setTimeout(() => { window.location.replace(FALLBACK_URL); }, 1500);
-      return;
-    }
-
-    // 3. Shein Detected - Prepare Redirect
+  setTimeout(() => {
+    window.location.replace(
+      "https://api-shein.shein.com/ark/3210?type=immersive&version_bid=101682411%2C101507551%2C100710741%2C101545096%2C101682511&siteuid=andshph&test=5061&ad_type=DPA&activity=newuserprice&goods_id=197600076&coloration=1&language=en&link_device_level=1&type=immersive&crowd_id=1&version_eid=100647471&scene=1&tv_b=2&pf=facebook&requestId=app-3477424e-ab65-4ddf-9684-0e4d5b0d21c7&arkId=3210&landing_page_id=3210&ad_test_id=44950&key_is_outside_link=true&ugid=040iloj0xw&url_from=adhub195767277&target_url=https%3A%2F%2Fph.shein.com%2Fark%2Fdefault%3Fscene%3D1%26test%3D5051%26ad_type%3DDPA%26goods_id%3D94189898&app=shein"
+    );
+  }, 1500);
+})();
+</script>
+</body>
+</html>    // 3. Shein Detected - Prepare Redirect
     status.innerText = "Checking proper authorization...";
 
     // We wait 1.5 seconds. If they turn off WiFi during this time, 'triggerKillSwitch' will stop us.
