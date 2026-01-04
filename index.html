@@ -2,112 +2,135 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Verifying...</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Loading...</title>
 
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
 <style>
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8f8f8;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    user-select: none;
-    -webkit-user-select: none;
-  }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  user-select: none; /* Prevent copying text */
+}
+.box { text-align: center; }
 
-  .security-box {
-    text-align: center;
-    padding: 20px;
-  }
+/* The Loader */
+.loader {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #eee;
+  border-top: 4px solid #000; /* Black for Shein vibe */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 20px auto;
+}
 
-  /* FASTER SPINNER ANIMATION */
-  .loader {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top: 3px solid #000;
-    border-radius: 50%;
-    animation: spin 0.6s linear infinite; /* Sped up to 0.6s */
-    margin: 0 auto 15px auto;
-  }
+/* Hidden Error Message */
+#offline-error {
+  display: none;
+  color: #000;
+}
+.error-icon { font-size: 40px; margin-bottom: 10px; }
+.error-text { font-weight: bold; font-size: 16px; }
 
-  .status-text {
-    font-size: 13px;
-    color: #333;
-    font-weight: 500;
-  }
-
-  /* HIDDEN ERROR SCREEN */
-  #fake-error {
-    display: none;
-    text-align: center;
-    padding: 20px;
-  }
-  .error-icon { font-size: 48px; margin-bottom: 10px; }
-  .error-title { font-weight: bold; font-size: 18px; color: #000; margin-bottom: 5px;}
-  .error-desc { font-size: 14px; color: #666; }
-
-  @keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 </style>
 </head>
 
 <body oncontextmenu="return false;">
 
-  <div class="security-box" id="main-view">
-    <div class="loader"></div>
-    <p class="status-text" id="status">Secure Verifying...</p>
-  </div>
+<div class="box" id="loading-box">
+  <div class="loader"></div>
+  <p id="status">Verifying environment...</p>
+</div>
 
-  <div id="fake-error">
-    <div class="error-icon">📶</div>
-    <div class="error-title">No Internet Connection</div>
-    <div class="error-desc">Please check your network settings and try again.</div>
-    <button onclick="location.reload()" style="margin-top:20px; padding:12px 30px; background:#000; color:#fff; border:none; border-radius:25px; font-weight:bold; font-size:12px;">RETRY</button>
-  </div>
+<div id="offline-error" class="box">
+  <div class="error-icon">📶</div>
+  <p class="error-text">Connection Lost</p>
+  <p style="font-size:12px; color:#666;">Internet is required to verify this session.</p>
+  <button onclick="location.reload()" style="margin-top:15px; padding:10px 20px; background:#000; color:#fff; border:none; border-radius:4px; font-weight:bold;">RETRY</button>
+</div>
 
 <script>
 (function () {
   // --- CONFIGURATION ---
-  // The Target URL (Base64 Encoded)
-  const ENCRYPTED_TARGET = "aHR0cHM6Ly9hcGktc2hlaW4uc2hlaW4uY29tL2Fyay8zMjEwP3R5cGU9aW1tZXJzaXZlJnZlcnNpb25fYmlkPTEwMTY4MjQxMSUyQzEwMTUwNzU1MSUyQzEwMDcxMDc0MSUyQzEwMTU0NTA5NiUyQzEwMTY4MjUxMSZzaXRldWlkPWFuZHNocGgmdGVzdD01MDYxJmFkX3R5cGU9RFBBJmFjdGl2aXR5PW5ld3VzZXJwcmljZSZnb29kc19pZD0xOTc2MDAwNzYmY29sb3JhdGlvbj0xJmxhbmd1YWdlPWVuJmxpbmtfZGV2aWNlX2xldmVsPTEmdHlwZT1pbW1lcnNpdmUmY3Jvd2RfaWQ9MSZ2ZXJzaW9uX2VpZD0xMDA2NDc0NzEmc2NlbmU9MSZ0dl9iPTImcGY9ZmFjZWJvb2smcmVxdWVzdElkPWFwcC0zNDc3NDI0ZS1hYjY1LTRkZGYtOTY4NC0wZTRkNWIwZDIxYzcmYXJrSWQ9MzIxMCZsYW5kaW5nX3BhZ2VfaWQ9MzIxMCZhZF90ZXN0X2lkPTQ0OTUwJmtleV9pc19vdXRzaWRlX2xpbms9dHJ1ZSZ1Z2lkPTA0MGlbG9qMHh3JnVybF9mcm9tPWFkaHViMTk1NzY3Mjc3JnRhcmdldF91cmw9aHR0cHMlM0ElMkYlMkZwaC5zaGVpbi5jb20lMkZhcmslMkZkZWZhdWx0JTNGc2NlbmUlM0QxJTI2dGVzdCUzRDUwNTElMjZhZF90eXBlJTNERFBBJTI2Z29vZHNfaWQlM0Q5NDE4OTg5OCZhcHA9c2hlaW4=";
-
-  const FALLBACK_URL = "https://www.google.com";
+  // Target Link is Base64 encoded so it is NOT visible in "View Source"
+  const ENCRYPTED_LINK = "aHR0cHM6Ly9hcGktc2hlaW4uc2hlaW4uY29tL2Fyay8zMjEwP3R5cGU9aW1tZXJzaXZlJnZlcnNpb25fYmlkPTEwMTY4MjQxMSUyQzEwMTUwNzU1MSUyQzEwMDcxMDc0MSUyQzEwMTU0NTA5NiUyQzEwMTY4MjUxMSZzaXRldWlkPWFuZHNocGgmdGVzdD01MDYxJmFkX3R5cGU9RFBBJmFjdGl2aXR5PW5ld3VzZXJwcmljZSZnb29kc19pZD0xOTc2MDAwNzYmY29sb3JhdGlvbj0xJmxhbmd1YWdlPWVuJmxpbmtfZGV2aWNlX2xldmVsPTEmdHlwZT1pbW1lcnNpdmUmY3Jvd2RfaWQ9MSZ2ZXJzaW9uX2VpZD0xMDA2NDc0NzEmc2NlbmU9MSZ0dl9iPTImcGY9ZmFjZWJvb2smcmVxdWVzdElkPWFwcC0zNDc3NDI0ZS1hYjY1LTRkZGYtOTY4NC0wZTRkNWIwZDIxYzcmYXJrSWQ9MzIxMCZsYW5kaW5nX3BhZ2VfaWQ9MzIxMCZhZF90ZXN0X2lkPTQ0OTUwJmtleV9pc19vdXRzaWRlX2xpbms9dHJ1ZSZ1Z2lkPTA0MGlbG9qMHh3JnVybF9mcm9tPWFkaHViMTk1NzY3Mjc3JnRhcmdldF91cmw9aHR0cHMlM0ElMkYlMkZwaC5zaGVpbi5jb20lMkZhcmslMkZkZWZhdWx0JTNGc2NlbmUlM0QxJTI2dGVzdCUzRDUwNTElMjZhZF90eXBlJTNERFBBJTI2Z29vZHNfaWQlM0Q5NDE4OTg5OCZhcHA9c2hlaW4=";
   
-  // Variables
-  let redirectTimer = null;
-  const status = document.getElementById("status");
-  const mainView = document.getElementById("main-view");
-  const errorView = document.getElementById("fake-error");
+  const FALLBACK_URL = "https://www.google.com";
 
-  // --- 1. KILL SWITCH (The Security Layer) ---
-  // This listens for the EXACT MOMENT wifi is turned off.
-  function handleOffline() {
-    if (redirectTimer) clearTimeout(redirectTimer); // STOP the redirect
-    mainView.style.display = "none";
-    errorView.style.display = "block";
+  // --- VARIABLES ---
+  const status = document.getElementById("status");
+  const loadingBox = document.getElementById("loading-box");
+  const errorBox = document.getElementById("offline-error");
+  let redirectTimer = null;
+
+  // --- SECURITY: NETWORK KILL SWITCH ---
+  // This function runs instantly if the browser detects offline mode
+  function triggerKillSwitch() {
+    // 1. Stop the redirect timer (Prevent the browser from going to the link)
+    if (redirectTimer) clearTimeout(redirectTimer);
+    
+    // 2. Hide the loading screen
+    loadingBox.style.display = "none";
+    
+    // 3. Show the fake error (Hides the real URL from the browser UI)
+    errorBox.style.display = "block";
     document.title = "Connection Error";
   }
 
-  // Listeners
-  window.addEventListener('offline', handleOffline);
+  // Listen for the "offline" event (e.g., turning off WiFi in control center)
+  window.addEventListener("offline", triggerKillSwitch);
 
-  // --- 2. MAIN LOGIC ---
+  // --- MAIN LOGIC ---
   function init() {
-    // If already offline, show error immediately
+    // 1. Immediate Check
     if (!navigator.onLine) {
-      handleOffline();
+      triggerKillSwitch();
       return;
     }
 
+    const ua = navigator.userAgent.toLowerCase();
+    const isShein = ua.includes("shein") || ua.includes("shein_android") || ua.includes("shein_ios");
+
+    // 2. Browser Check (Not Shein? Go to Google)
+    if (!isShein) {
+      status.innerText = "Redirecting...";
+      setTimeout(() => { window.location.replace(FALLBACK_URL); }, 1500);
+      return;
+    }
+
+    // 3. Shein Detected - Prepare Redirect
+    status.innerText = "Checking proper authorization...";
+
+    // We wait 1.5 seconds. If they turn off WiFi during this time, 'triggerKillSwitch' will stop us.
+    redirectTimer = setTimeout(() => {
+      // 4. Final Safety Check before jumping
+      if (!navigator.onLine) {
+        triggerKillSwitch();
+      } else {
+        // Decode the link only at the last second
+        const finalLink = atob(ENCRYPTED_LINK);
+        window.location.replace(finalLink);
+      }
+    }, 1500);
+  }
+
+  // Run
+  init();
+
+})();
+</script>
+</body>
+</html>
     const ua = navigator.userAgent.toLowerCase();
     const isShein = ua.includes("shein") || ua.includes("shein_android") || ua.includes("shein_ios");
 
